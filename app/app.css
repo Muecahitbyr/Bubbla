@@ -1,0 +1,384 @@
+@import "tailwindcss";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "lenis/dist/lenis.css";
+
+/* ================================================================== */
+/*  Design-Tokens „Allgäu-Blau“                                        */
+/*  Blau & Gelb aus dem Bubla-Logo, Tiefblau für ruhige dunkle Flächen */
+/* ================================================================== */
+
+@theme {
+  --font-sans: "Plus Jakarta Sans Variable", "Helvetica Neue", Arial, sans-serif;
+
+  /* Markenfarben (Logo + bisheriger Webauftritt) */
+  --color-bubla: #005ba4; /* Bubla-Blau – Text, Links, Flächen */
+  --color-bubla-bright: #0365e1; /* Logo-Blau – Leuchtakzente */
+  --color-sun: #f8e322; /* Logo-Gelb */
+  --color-sun-deep: #e8c900;
+  --color-night: #061c33; /* Tiefblau für dunkle Sektionen */
+  --color-ink: #0b1b2b;
+  --color-mist: #eef4fb;
+
+  --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sektionsfarben laufen über Variablen – jede Sektion schaltet ihre Farbwelt mit tone-* um */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-tile: var(--tile);
+  --color-tile-2: var(--tile-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+}
+
+:root,
+.tone-paper {
+  --bg: #ffffff;
+  --tile: #f2f6fb;
+  --tile-2: #e3ecf6;
+  --fg: #0b1b2b;
+  --muted: #56667a;
+  --line: rgb(11 27 43 / 0.1);
+  --accent: #005ba4;
+  --ink-a: #0b1b2b;
+  --ink-b: #1d4e80;
+  color-scheme: light;
+}
+
+.tone-mist {
+  --bg: #eef4fb;
+  --tile: #ffffff;
+  --tile-2: #dde8f5;
+  --fg: #0b1b2b;
+  --muted: #4f6076;
+  --line: rgb(0 91 164 / 0.14);
+  --accent: #005ba4;
+  --ink-a: #0b1b2b;
+  --ink-b: #1d4e80;
+  color-scheme: light;
+}
+
+/* Tiefblau – ersetzt das Schwarz klassischer Apple-Seiten */
+.tone-night {
+  --bg: #061c33;
+  --tile: #0c2946;
+  --tile-2: #123456;
+  --fg: #f3f7fc;
+  --muted: #9fb3c8;
+  --line: rgb(255 255 255 / 0.14);
+  --accent: #f8e322;
+  --ink-a: #ffffff;
+  --ink-b: #b9cde3;
+  color-scheme: dark;
+}
+
+/* Kräftiges Bubla-Blau für Signalflächen */
+.tone-blue {
+  --bg: #005ba4;
+  --tile: #0a67b3;
+  --tile-2: #1373bf;
+  --fg: #ffffff;
+  --muted: #cfe0f1;
+  --line: rgb(255 255 255 / 0.2);
+  --accent: #f8e322;
+  --ink-a: #ffffff;
+  --ink-b: #d8e7f6;
+  color-scheme: dark;
+}
+
+.tone-paper,
+.tone-mist,
+.tone-night,
+.tone-blue {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* ================================================================== */
+/*  Basis                                                              */
+/* ================================================================== */
+
+@layer base {
+  :root {
+    /* Höhe der schwebenden Navigation inkl. Abstand nach oben und der Unter-Navigation */
+    --nav-offset: 72px;
+    --subnav-h: 56px;
+  }
+  @media (width >= 48rem) {
+    :root {
+      --nav-offset: 84px;
+    }
+  }
+
+  html {
+    overflow-x: clip;
+    /* Sprungmarken landen unter Navigation + Unter-Navigation */
+    scroll-padding-top: calc(var(--nav-offset) + var(--subnav-h));
+    background: #fff;
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: #fff;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+    hyphens: manual;
+    overflow-wrap: break-word;
+  }
+
+  /* Silbentrennung nur auf schmalen Bildschirmen (sonst „Au-tobahn“ in großen Headlines) */
+  @media (width < 40rem) {
+    h1,
+    h2,
+    h3,
+    h4 {
+      hyphens: auto;
+    }
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  /* Einspaltige Raster dürfen nie breiter als der Bildschirm werden */
+  [class~="grid"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Telefonnummern: gleich breite Ziffern und sichtbare Leerstellen (die „1“ ist sehr schmal) */
+  a[href^="tel:"] {
+    font-variant-numeric: tabular-nums;
+    word-spacing: 0.14em;
+  }
+
+  ::selection {
+    background: var(--color-sun);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2.5px solid var(--color-bubla-bright);
+    outline-offset: 3px;
+    border-radius: 10px;
+  }
+  .tone-night :focus-visible,
+  .tone-blue :focus-visible {
+    outline-color: var(--color-sun);
+  }
+}
+
+/* ================================================================== */
+/*  Typografie                                                         */
+/* ================================================================== */
+
+@utility display-xl {
+  font-size: clamp(3rem, 8.6vw, 8.25rem);
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+@utility display-lg {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+@utility display-md {
+  font-size: clamp(2.05rem, 4.3vw, 3.75rem);
+  line-height: 1.06;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+@utility display-sm {
+  font-size: clamp(1.6rem, 2.8vw, 2.35rem);
+  line-height: 1.14;
+  font-weight: 750;
+  letter-spacing: -0.028em;
+}
+
+/* Kleine Überzeile mit gelbem Fahrbahn-Strich davor */
+@utility kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  &::before {
+    content: "";
+    width: 1.9em;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-sun);
+    flex-shrink: 0;
+  }
+}
+
+/* Großer ruhiger Absatz: gedämpft, wichtige Begriffe in <strong> kräftig */
+@utility lead {
+  font-size: clamp(1.125rem, 1.6vw, 1.4rem);
+  line-height: 1.45;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  color: var(--muted);
+  & strong,
+  & a {
+    color: var(--fg);
+    font-weight: 700;
+  }
+  & a {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-sun) 90%, transparent);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px;
+  }
+}
+
+@utility prose-text {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--muted);
+  & strong {
+    color: var(--fg);
+    font-weight: 700;
+  }
+  & a {
+    color: var(--fg);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    text-underline-offset: 4px;
+  }
+}
+
+/* Verlaufs-Schrift. Bewusst NICHT „text-…“ genannt, damit nichts mit Tailwind-Farben kollidiert. */
+@utility grad-ink {
+  background-image: linear-gradient(180deg, var(--ink-a) 35%, var(--ink-b) 115%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility grad-blue {
+  background-image: linear-gradient(100deg, #0a74f0 0%, #005ba4 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility grad-sun {
+  background-image: linear-gradient(100deg, #fff27a 0%, #f8e322 45%, #f2c200 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Safari zeichnet Verlaufs-Text nicht durch animierte Wort-Spans hindurch –
+   deshalb erbt jedes einzelne Wort den Verlauf selbst */
+.grad-ink .word,
+.grad-blue .word,
+.grad-sun .word {
+  background-image: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gelber Leuchtmarker unter einzelnen Wörtern */
+@utility highlight {
+  background-image: linear-gradient(transparent 64%, rgb(248 227 34 / 0.9) 64%, rgb(248 227 34 / 0.9) 92%, transparent 92%);
+  background-repeat: no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-inline: 0.05em;
+}
+
+/* ================================================================== */
+/*  Layout-Helfer                                                      */
+/* ================================================================== */
+
+@utility wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1280px;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility wrap-narrow {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 900px;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility glass-pill {
+  background: rgb(255 255 255 / 0.78);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  backdrop-filter: saturate(180%) blur(22px);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.6) inset,
+    0 10px 30px -12px rgb(6 28 51 / 0.28),
+    0 0 0 1px rgb(6 28 51 / 0.07);
+}
+
+@utility glass-dark {
+  background: rgb(6 28 51 / 0.42);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
+  border: 1px solid rgb(255 255 255 / 0.16);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Gestrichelte Fahrbahnmarkierung (z. B. als Trenner) */
+@utility lane {
+  height: 4px;
+  background-image: repeating-linear-gradient(90deg, var(--color-sun) 0 28px, transparent 28px 44px);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

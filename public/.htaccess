@@ -1,0 +1,47 @@
+# Apache-Konfiguration für den statischen Build (Inhalt von build/client)
+Options -MultiViews
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+AddType text/html .htm
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # HTTPS erzwingen – erst aktivieren, wenn das SSL-Zertifikat eingerichtet ist:
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # www → ohne www
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ %{REQUEST_SCHEME}://%1%{REQUEST_URI} [L,R=301]
+
+  # Alte Startseite /index.htm → /
+  RewriteRule ^index\.htm$ / [L,R=301]
+</IfModule>
+
+# Unbekannte URLs → 404-Seite der App
+ErrorDocument 404 /404.html
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml application/xml
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>

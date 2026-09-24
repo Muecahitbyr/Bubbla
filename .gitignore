@@ -1,0 +1,8 @@
+node_modules
+/build
+/.react-router
+.DS_Store
+*.local
+/design-review
+/test-results
+/playwright-report
