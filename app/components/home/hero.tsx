@@ -33,8 +33,10 @@ export function HomeHero() {
   const boxSide = useMotionValue(0)
   const boxH = useMotionValue("100%")
   const boxRadius = useMotionValue(0)
-  // Desktop: Foto im Startzustand so verschieben, dass das Motiv mittig in der Karte sitzt
+  // Desktop: Im Startzustand wird das Foto verkleinert und so verschoben, dass das ganze Motiv
+  // in der flachen Karte sitzt; beim Aufziehen wächst es auf Vollbildgröße
   const imgShift = useMotionValue(0)
+  const imgScale = useMotionValue(1.06)
   // Karte erst einblenden, wenn sie gemessen ist – sonst springt sie beim Laden
   const cardOpacity = useMotionValue(0)
 
@@ -46,7 +48,11 @@ export function HomeHero() {
       boxSide.set(0)
       boxH.set("100%")
       boxRadius.set(0)
-      imgShift.set(((top + (vh - bottom)) / 2 - vh / 2) * (1 - t))
+      // Kleinste Größe, bei der das Foto die Karte noch ganz füllt (kein leerer Rand)
+      const s0 = Math.min(1, Math.max((vw - 2 * side) / vw, (vh - top - bottom) / vh, 0.8) + 0.02)
+      imgScale.set(s0 + (1 - s0) * t)
+      // Kartenmitte, leicht nach oben korrigiert (das Auto sitzt im Foto etwas unter der Bildmitte)
+      imgShift.set(((top + (vh - bottom)) / 2 - vh / 2 - vh * 0.06) * (1 - t))
       clipPath.set(`inset(${top * (1 - t)}px ${side * (1 - t)}px ${bottom * (1 - t)}px ${side * (1 - t)}px round ${32 * (1 - t)}px)`)
       return
     }
@@ -57,11 +63,12 @@ export function HomeHero() {
     const endH = vw * MOBILE_BAND_RATIO
     clipPath.set("none")
     imgShift.set(0)
+    imgScale.set(1.06 - 0.06 * t)
     boxTop.set(lerp(top, MOBILE_BAND_TOP))
     boxSide.set(lerp(side, 0))
     boxH.set(`${lerp(startH, endH)}px`)
     boxRadius.set(lerp(26, 0))
-  }, [p, reduce, clipPath, boxTop, boxSide, boxH, boxRadius, imgShift])
+  }, [p, reduce, clipPath, boxTop, boxSide, boxH, boxRadius, imgShift, imgScale])
   useMotionValueEvent(p, "change", update)
 
   useEffect(() => {
@@ -104,7 +111,6 @@ export function HomeHero() {
 
   // Deckkraft & Co. per Funktion aus dem Scrollwert (nicht über die beschleunigte Scroll-Timeline)
   const range = (a: number, b: number) => (reduce ? 0 : clamp01((p.get() - a) / (b - a)))
-  const imgScale = useTransform(() => 1.08 - ease(range(0, 0.6)) * 0.08)
   const headOpacity = useTransform(() => 1 - range(0.02, 0.2))
   const headY = useTransform(() => -range(0, 0.3) * 70)
   const headPointer = useTransform(() => (range(0.02, 0.2) > 0.95 ? "none" : "auto"))

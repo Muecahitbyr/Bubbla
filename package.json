@@ -7,7 +7,7 @@
     "dev": "react-router dev",
     "build": "react-router build",
     "postbuild": "node scripts/postbuild.mjs",
-    "preview": "serve build/client -l 4173",
+    "preview": "serve build/client -l 4180",
     "typecheck": "react-router typegen && tsc",
     "test": "playwright test"
   },

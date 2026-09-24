@@ -1,22 +1,22 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { ArrowUpRight, MessageCircle, SendHorizontal, X } from "lucide-react"
-import { useEffect, useId, useRef, useState, type FormEvent } from "react"
+import { ArrowUpRight, Check, MessageCircle, X } from "lucide-react"
+import { useEffect, useId, useRef, useState } from "react"
 import { Link, useLocation } from "react-router"
-import { answerFor, answerForIntent, greeting, suggestions, type AssistantAnswer, type AssistantLink } from "~/content/assistant"
+import { greeting, questionGroups, type AssistantAnswer, type AssistantLink, type Question } from "~/content/assistant"
 import { cn } from "~/lib/cn"
 import { easeOutExpo } from "~/lib/motion"
 
 type Message = { id: number; from: "bot" | "user"; answer?: AssistantAnswer; text?: string }
 
 /**
- * Fahrschul-Assistent (unten rechts). Regelbasiert, läuft komplett im Browser und
- * antwortet nur mit Angaben aus app/content/ – es werden keine Daten versendet.
+ * Fahrschul-Assistent (unten rechts): alle Fragen zum Antippen, kein Freitext.
+ * Läuft komplett im Browser und antwortet nur mit Angaben aus app/content/.
  */
 export function Assistant() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([{ id: 0, from: "bot", answer: greeting }])
-  const [input, setInput] = useState("")
   const [typing, setTyping] = useState(false)
+  const [asked, setAsked] = useState<Set<string>>(new Set())
   const nextId = useRef(1)
   const listRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -30,8 +30,7 @@ export function Assistant() {
 
   useEffect(() => {
     if (!open) return
-    // Fokus aufs Chatfenster, nicht ins Eingabefeld – so öffnet sich auf dem Handy
-    // keine Tastatur. Die Tastatur erscheint erst, wenn man ins Eingabefeld tippt.
+    // Fokus aufs Chatfenster (für Tastatur & Screenreader)
     panelRef.current?.focus({ preventScroll: true })
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -53,10 +52,19 @@ export function Assistant() {
     }
   }, [open])
 
+  // Nach einer Frage zur gestellten Frage scrollen – die Antwort liest man dann von oben,
+  // die Fragenliste folgt darunter
   useEffect(() => {
     const el = listRef.current
-    if (el) el.scrollTo({ top: el.scrollHeight, behavior: reduce ? "auto" : "smooth" })
+    if (!el || messages.length < 2) return
+    const last = el.querySelector<HTMLElement>("[data-last-question]")
+    if (last) el.scrollTo({ top: last.offsetTop - 12, behavior: reduce ? "auto" : "smooth" })
   }, [messages, typing, reduce])
+
+  const ask = (q: Question) => {
+    setAsked((a) => new Set(a).add(q.id))
+    reply(q.label, q.answer())
+  }
 
   const reply = (question: string, answer: AssistantAnswer) => {
     setMessages((m) => [...m, { id: nextId.current++, from: "user", text: question }])
@@ -68,14 +76,6 @@ export function Assistant() {
       },
       reduce ? 0 : 450,
     )
-  }
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    const q = input.trim()
-    if (!q) return
-    setInput("")
-    reply(q, answerFor(q).answer)
   }
 
   return (
@@ -103,7 +103,7 @@ export function Assistant() {
                   <p id={titleId} className="text-[16px] leading-tight font-bold text-white">
                     Fahrschul-Assistent
                   </p>
-                  <p className="text-muted text-[12.5px]">Antworten aus den Angaben dieser Website</p>
+                  <p className="text-muted text-[12.5px]">Frage antippen – Antwort aus dieser Website</p>
                 </div>
               </div>
               <button
@@ -119,48 +119,55 @@ export function Assistant() {
               </button>
             </div>
 
-            <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-5" aria-live="polite" aria-relevant="additions">
-              {messages.map((m) => (m.from === "user" ? <UserBubble key={m.id} text={m.text!} /> : <BotBubble key={m.id} answer={m.answer!} />))}
-              {typing && (
-                <div className="bg-mist w-fit rounded-2xl rounded-bl-md px-4 py-3" aria-label="Assistent schreibt">
-                  <span className="flex gap-1">
-                    {[0, 1, 2].map((i) => (
-                      <span key={i} className="bg-bubla/50 size-1.5 animate-bounce rounded-full" style={{ animationDelay: `${i * 120}ms` }} />
-                    ))}
-                  </span>
+            <div ref={listRef} className="relative flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-5">
+              <div aria-live="polite" aria-relevant="additions" className="space-y-3">
+                {messages.map((m, i) =>
+                  m.from === "user" ? (
+                    <UserBubble key={m.id} text={m.text!} last={i === lastUserIndex(messages)} />
+                  ) : (
+                    <BotBubble key={m.id} answer={m.answer!} />
+                  ),
+                )}
+                {typing && (
+                  <div className="bg-mist w-fit rounded-2xl rounded-bl-md px-4 py-3" aria-label="Assistent schreibt">
+                    <span className="flex gap-1">
+                      {[0, 1, 2].map((i) => (
+                        <span key={i} className="bg-bubla/50 size-1.5 animate-bounce rounded-full" style={{ animationDelay: `${i * 120}ms` }} />
+                      ))}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Alle Fragen – immer sichtbar am Ende des Verlaufs */}
+              {!typing && (
+                <div className="space-y-4 pt-3">
+                  {questionGroups.map((g) => (
+                    <div key={g.title} role="group" aria-label={g.title}>
+                      <p className="text-muted mb-2 text-[12px] font-bold tracking-[0.08em] uppercase">{g.title}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {g.questions.map((q) => {
+                          const done = asked.has(q.id)
+                          return (
+                            <button
+                              key={q.id}
+                              type="button"
+                              onClick={() => ask(q)}
+                              className={cn(
+                                "inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-left text-[13.5px] leading-tight font-semibold transition-colors",
+                                done ? "text-muted bg-white ring-1 ring-black/10 hover:bg-mist" : "bg-mist text-bubla hover:bg-tile-2",
+                              )}
+                            >
+                              {done && <Check className="size-3.5 shrink-0" aria-hidden />}
+                              {q.label}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
-            </div>
-
-            <div className="border-t border-black/[0.06] px-3 pt-3 pb-3">
-              <div className="no-scrollbar -mx-3 mb-3 flex gap-2 overflow-x-auto px-3" role="group" aria-label="Vorgeschlagene Fragen">
-                {suggestions.map((s) => (
-                  <button
-                    key={s.intent}
-                    type="button"
-                    onClick={() => reply(s.label, answerForIntent(s.intent))}
-                    className="bg-mist hover:bg-tile-2 text-bubla shrink-0 rounded-full px-3.5 py-2 text-[13px] font-semibold whitespace-nowrap transition-colors"
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-              <form onSubmit={onSubmit} className="flex items-center gap-2">
-                <label htmlFor={`${titleId}-input`} className="sr-only">
-                  Deine Frage
-                </label>
-                <input
-                  id={`${titleId}-input`}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Frag mich etwas …"
-                  autoComplete="off"
-                  className="bg-mist focus:ring-bubla-bright min-w-0 flex-1 rounded-full px-4 py-3 text-[16px] outline-none focus:ring-2"
-                />
-                <button type="submit" className="bg-bubla grid size-12 shrink-0 place-items-center rounded-full text-white disabled:opacity-40" disabled={!input.trim()} aria-label="Frage senden">
-                  <SendHorizontal className="size-5" aria-hidden />
-                </button>
-              </form>
             </div>
           </motion.div>
         )}
@@ -184,9 +191,11 @@ export function Assistant() {
   )
 }
 
-function UserBubble({ text }: { text: string }) {
+const lastUserIndex = (messages: Message[]) => messages.map((m) => m.from).lastIndexOf("user")
+
+function UserBubble({ text, last }: { text: string; last: boolean }) {
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end" data-last-question={last || undefined}>
       <p className="bg-bubla max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5 text-[15px] text-white">{text}</p>
     </div>
   )

@@ -11,10 +11,10 @@ export default defineConfig({
   fullyParallel: true,
   workers: 4,
   reporter: [["list"]],
-  use: { baseURL: "http://localhost:4173" },
+  use: { baseURL: "http://localhost:4180" },
   webServer: {
-    command: "npx serve build/client -l 4173 --no-clipboard",
-    url: "http://localhost:4173",
+    command: "npx serve build/client -l 4180 --no-clipboard",
+    url: "http://localhost:4180",
     reuseExistingServer: true,
   },
   projects: [

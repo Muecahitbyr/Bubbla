@@ -114,25 +114,26 @@ test("Anmeldeformular prüft Pflichtfelder", async ({ page }) => {
   expect(await page.getByLabel("Vorname *").evaluate((el: HTMLInputElement) => el.validity.valueMissing)).toBe(true)
 })
 
-test("Fahrschul-Assistent: Vorschläge, Freitext, Rückfallantwort, Escape", async ({ page }) => {
+test("Fahrschul-Assistent: alle Fragen sichtbar, kein Eingabefeld, Antworten, Escape", async ({ page }) => {
   await page.goto("/")
   await page.getByRole("button", { name: "Fahrschul-Assistent öffnen" }).click()
   const dialog = page.getByRole("dialog", { name: "Fahrschul-Assistent" })
   await expect(dialog).toBeVisible()
-  // Fokus liegt im Chatfenster, NICHT im Eingabefeld (keine Tastatur auf dem Handy)
   await expect(dialog).toBeFocused()
-  await expect(dialog.getByRole("textbox")).not.toBeFocused()
+  await expect(dialog.getByRole("textbox")).toHaveCount(0)
+
+  const general = dialog.getByRole("group", { name: "Häufige Fragen" }).getByRole("button")
+  const perClass = dialog.getByRole("group", { name: "Zu einer Klasse" }).getByRole("button")
+  expect(await general.count()).toBeGreaterThanOrEqual(10)
+  expect(await perClass.count()).toBe(10)
 
   await dialog.getByRole("button", { name: "Wann ist Theorieunterricht?" }).click()
   await expect(dialog.getByText(/immer von 19:00 – 20:30 Uhr/)).toBeVisible()
+  // Fragen stehen danach wieder vollständig bereit
+  await expect(general).toHaveCount(await general.count())
 
-  await dialog.getByRole("textbox").fill("Was kostet der A2 Führerschein?")
-  await dialog.getByRole("button", { name: "Frage senden" }).click()
+  await dialog.getByRole("button", { name: /^A2 · / }).click()
   await expect(dialog.getByText(/Motorrad Klasse A2: Ab 18/)).toBeVisible()
-
-  await dialog.getByRole("textbox").fill("Wie wird das Wetter morgen?")
-  await dialog.getByRole("button", { name: "Frage senden" }).click()
-  await expect(dialog.getByText(/leider keine Angabe/)).toBeVisible()
 
   await page.keyboard.press("Escape")
   await expect(dialog).toBeHidden()
@@ -174,9 +175,6 @@ test("Assistent: Klick außerhalb schließt, Klick ins Fenster nicht", async ({ 
   // Klick in den Chat (Begrüßungstext) lässt ihn offen
   await dialog.getByText(/Fahrschul-Assistent der Fahrschule Bubla/).click()
   await expect(dialog).toBeVisible()
-  // Tipp ins Eingabefeld fokussiert erst dann das Feld
-  await dialog.getByRole("textbox").click()
-  await expect(dialog.getByRole("textbox")).toBeFocused()
   // Klick außerhalb (oben auf die Seite) schließt
   await page.mouse.click(20, 20)
   await expect(dialog).toBeHidden()

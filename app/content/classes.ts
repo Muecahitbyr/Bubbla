@@ -54,8 +54,6 @@ export type LicenseClass = {
   imageAlt: string
   imagePosition?: string
   ageBadge?: string
-  /** Stichwörter, an denen der Fahrschul-Assistent die Klasse erkennt (klein, ohne Umlaute) */
-  keywords: string[]
   /** true = komplette Klasse ist Beispielinhalt (nicht von der bisherigen Website) */
   mock: boolean
   related?: string[]
@@ -120,7 +118,6 @@ export const classes: LicenseClass[] = [
     image: "/images/stock/fahrerin-laechelt.webp",
     imageAlt: "Fahrschülerin lächelt am Lenkrad",
     imagePosition: "60% center",
-    keywords: ["autofuehrerschein", "pkw", "auto", "klasse b"],
     mock: false,
     related: ["bf17", "b197", "be"],
   },
@@ -153,7 +150,6 @@ export const classes: LicenseClass[] = [
     imageAlt: "Junge Fahrerin in orangefarbener Jacke am Lenkrad",
     imagePosition: "55% center",
     ageBadge: "ab 17",
-    keywords: ["bf17", "b17", "begleitet", "begleitperson", "mit 17"],
     mock: false,
     related: ["b"],
   },
@@ -190,7 +186,6 @@ export const classes: LicenseClass[] = [
     image: "/images/stock/fahrerperspektive.webp",
     imageAlt: "Blick vom Fahrersitz auf Lenkrad und Straße",
     imagePosition: "center 58%",
-    keywords: ["automatik", "b197", "schaltwagen", "schalten", "197"],
     mock: true,
     related: ["b"],
   },
@@ -222,7 +217,6 @@ export const classes: LicenseClass[] = [
     ],
     image: "/images/stock/anhaenger.webp",
     imageAlt: "Pkw-Anhänger mit blauer Plane am Straßenrand",
-    keywords: ["anhaenger", "be", "wohnwagen", "pferdeanhaenger", "klasse be", "3500"],
     mock: true,
     related: ["b96"],
   },
@@ -246,7 +240,6 @@ export const classes: LicenseClass[] = [
     fees: [{ id: "schulung", label: "Schulungspaket B96", detail: "2,5 Std. Theorie + 3,5 Std. Praxis", price: 390, unit: "pauschal" }],
     image: "/images/stock/wohnwagen.webp",
     imageAlt: "Autos mit Wohnwagen auf einem Campingplatz in den Bergen",
-    keywords: ["b96", "schulung", "4250", "gespann"],
     mock: true,
     related: ["be"],
   },
@@ -280,7 +273,6 @@ export const classes: LicenseClass[] = [
     imageAlt: "Roter Motorroller vor einer bemalten Hauswand",
     imagePosition: "35% center",
     ageBadge: "ab 16",
-    keywords: ["roller", "moped", "klasse am", "45 km", "rollerfuehrerschein", "mopedfuehrerschein"],
     mock: true,
     related: ["a1"],
   },
@@ -314,7 +306,6 @@ export const classes: LicenseClass[] = [
     imageAlt: "Motorradfahrer mit Helm steht vor seinem Motorrad auf einer Waldstraße",
     imagePosition: "center 40%",
     ageBadge: "ab 16",
-    keywords: ["a1", "125", "leichtkraftrad", "125er"],
     mock: true,
     related: ["a2", "am"],
   },
@@ -346,7 +337,6 @@ export const classes: LicenseClass[] = [
     ],
     image: "/images/stock/motorrad-bergstrasse.webp",
     imageAlt: "Motorrad auf einer Bergstraße im Herbst",
-    keywords: ["a2", "35 kw"],
     mock: true,
     related: ["a", "a1"],
   },
@@ -382,7 +372,6 @@ export const classes: LicenseClass[] = [
     image: "/images/stock/motorrad-kurve.webp",
     imageAlt: "Motorradfahrer mit Helm auf einer Landstraße",
     imagePosition: "center 35%",
-    keywords: ["motorrad", "motorradfuehrerschein", "klasse a", "offen", "aufstieg"],
     mock: true,
     related: ["a2"],
   },
@@ -408,7 +397,6 @@ export const classes: LicenseClass[] = [
     imageAlt: "Hand hält einen Motorradhelm, dahinter ein Motorrad",
     imagePosition: "center 45%",
     ageBadge: "ab 25",
-    keywords: ["b196", "196", "125er mit auto", "leichtkraftrad mit b"],
     mock: true,
     related: ["a1"],
   },

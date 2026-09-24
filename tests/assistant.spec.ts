@@ -1,37 +1,26 @@
 import { expect, test } from "@playwright/test"
-import { answerFor } from "../app/content/assistant"
+import { classQuestions, generalQuestions, questionGroups } from "../app/content/assistant"
+import { classes } from "../app/content/classes"
+import { allPages } from "./helpers"
 
-const cases: [string, string | null][] = [
-  ["Wann ist Theorieunterricht?", "zeiten"],
-  ["Was kostet der Führerschein?", "preise"],
-  ["Wie melde ich mich an?", "anmeldung"],
-  ["Welche Unterlagen brauche ich?", "unterlagen"],
-  ["Ab welchem Alter kann ich anfangen?", "alter"],
-  ["Wo finde ich euch?", "anfahrt"],
-  ["Wie viele Fahrstunden brauche ich?", "fahrstunden"],
-  ["Wann ist die Theorieprüfung?", "pruefung"],
-  ["Gibt es eine Lern-App?", "lernen"],
-  ["Was kostet der Motorradführerschein?", "klasse-a"],
-  ["Ich will Roller fahren", "klasse-am"],
-  ["Anhänger fahren mit Wohnwagen", "klasse-be"],
-  ["Automatik Führerschein", "klasse-b197"],
-  ["Begleitetes Fahren mit 17", "klasse-bf17"],
-  ["Wer sind die Fahrlehrer?", "team"],
-  ["Telefonnummer?", "kontakt"],
-  ["Am Montag Zeit?", "zeiten"],
-  ["Welche Klassen gibt es?", "klassen"],
-  ["Hallo", "hallo"],
-  ["Was kostet der A2 Führerschein?", "klasse-a2"],
-  ["Was kostet Klasse BE?", "klasse-be"],
-  ["Brauche ich für B196 eine Prüfung?", "klasse-b196"],
-  ["Wie wird das Wetter?", null],
-]
+test("Assistent: jede Frage hat eine vollständige Antwort mit gültigen Links", async ({ browserName }) => {
+  test.skip(browserName !== "chromium", "reiner Logiktest")
+  const all = questionGroups.flatMap((g) => g.questions)
+  expect(new Set(all.map((q) => q.id)).size, "IDs eindeutig").toBe(all.length)
+  expect(new Set(all.map((q) => q.label)).size, "Beschriftungen eindeutig").toBe(all.length)
+  for (const q of all) {
+    const a = q.answer()
+    expect(a.text.join(" ").length, q.label).toBeGreaterThan(30)
+    for (const l of a.links ?? []) {
+      if (l.to.startsWith("/")) expect(allPages, `${q.label} → ${l.to}`).toContain(l.to.split("#")[0])
+      else expect(l.to, q.label).toMatch(/^(https:|tel:|mailto:)/)
+    }
+  }
+})
 
-for (const [q, intent] of cases) {
-  test(`Assistent erkennt: ${q}`, async ({ browserName }) => {
-    test.skip(browserName !== "chromium", "reiner Logiktest")
-    const r = answerFor(q)
-    expect(r.intent).toBe(intent)
-    expect(r.answer.text.join(" ").length).toBeGreaterThan(20)
-  })
-}
+test("Assistent: zu jeder Klasse gibt es eine Frage", async ({ browserName }) => {
+  test.skip(browserName !== "chromium", "reiner Logiktest")
+  expect(classQuestions.length).toBe(classes.length)
+  expect(generalQuestions.length).toBeGreaterThanOrEqual(10)
+  for (const c of classes) expect(classQuestions.some((q) => q.label.startsWith(`${c.code} · `)), c.code).toBe(true)
+})

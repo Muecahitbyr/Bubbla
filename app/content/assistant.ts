@@ -1,10 +1,10 @@
 /**
- * Fahrschul-Assistent: regelbasiert, ohne externe Dienste. Er antwortet NUR mit Angaben
- * aus den Inhaltsdateien (site.ts, classes.ts, info.ts, team.ts). Ändert sich dort etwas,
- * ändern sich die Antworten automatisch mit.
+ * Fahrschul-Assistent: vorgefertigte Fragen zum Antippen – kein Freitext, keine KI,
+ * keine externen Dienste. Jede Antwort wird aus den Inhaltsdateien (site.ts, classes.ts,
+ * info.ts, team.ts) zusammengesetzt; ändert sich dort etwas, ändern sich die Antworten mit.
  *
- * Neue Frage ergänzen: einen Eintrag in `intents` anlegen – `keywords` sind Wortteile
- * (klein, ohne Umlaute: „ae“ statt „ä“), `answer` baut die Antwort aus den Inhalten.
+ * Neue Frage ergänzen: einen Eintrag in `generalQuestions` anlegen (label + answer).
+ * Fragen zu den Klassen entstehen automatisch aus classes.ts.
  */
 
 import { categoryLabels, classB, classBF17, classes, mainFee, priceLabel, specialDriveTotal, type LicenseClass } from "./classes"
@@ -14,7 +14,7 @@ import { team } from "./team"
 
 export type AssistantLink = { label: string; to: string }
 export type AssistantAnswer = { text: string[]; links?: AssistantLink[] }
-export type Intent = { id: string; keywords: string[]; answer: () => AssistantAnswer }
+export type Question = { id: string; label: string; answer: () => AssistantAnswer }
 
 const mockNote = site.mock.enabled ? " (Beispielwerte – bitte bei uns nachfragen)" : ""
 const contactLine = `Telefon ${site.phone.display}, mobil ${site.mobile.display} oder per E-Mail an ${site.email}.`
@@ -23,24 +23,15 @@ const theoryPlace = `${site.theoryLocation.street}, ${site.theoryLocation.zip} $
 export const greeting: AssistantAnswer = {
   text: [
     "Hallo! Ich bin der Fahrschul-Assistent der Fahrschule Bubla. 👋",
-    "Ich beantworte Fragen zu Theoriezeiten, Preisen, Anmeldung, Unterlagen, Alter und Anfahrt – mit den Angaben von dieser Website. Tippe eine Frage an oder schreib einfach los.",
+    "Tippe einfach eine Frage an – ich antworte mit den Angaben von dieser Website.",
   ],
 }
 
-/** Vorgefertigte Fragen zum Antippen */
-export const suggestions: { label: string; intent: string }[] = [
-  { label: "Wann ist Theorieunterricht?", intent: "zeiten" },
-  { label: "Was kostet der Führerschein?", intent: "preise" },
-  { label: "Wie melde ich mich an?", intent: "anmeldung" },
-  { label: "Welche Unterlagen brauche ich?", intent: "unterlagen" },
-  { label: "Ab welchem Alter?", intent: "alter" },
-  { label: "Wo finde ich euch?", intent: "anfahrt" },
-]
-
-export const intents: Intent[] = [
+/** Häufige Fragen (erste Gruppe im Chat) */
+export const generalQuestions: Question[] = [
   {
     id: "zeiten",
-    keywords: ["wann", "uhr", "uhrzeit", "zeiten", "theorieunterricht", "unterricht", "theorie", "montag", "dienstag", "mittwoch", "donnerstag", "abend", "termin", "oeffnungs", "geoeffnet"],
+    label: "Wann ist Theorieunterricht?",
     answer: () => ({
       text: [
         `Theorieunterricht ist ${site.hours.theoryDays.join(", ").replace(/, (?=[^,]*$)/, " und ")} – immer von ${site.hours.theoryTime}.`,
@@ -53,7 +44,7 @@ export const intents: Intent[] = [
   },
   {
     id: "preise",
-    keywords: ["preis", "kost", "euro", "€", "teuer", "guenstig", "gebuehr", "bezahl", "grundbetrag", "grundpreis", "rate"],
+    label: "Was kostet der Führerschein?",
     answer: () => ({
       text: [
         `Für den Autoführerschein Klasse B${mockNote}:`,
@@ -65,7 +56,7 @@ export const intents: Intent[] = [
   },
   {
     id: "anmeldung",
-    keywords: ["anmeld", "melde", "registrier", "starten", "beginnen", "anfangen", "einschreib", "vertrag", "platz frei"],
+    label: "Wie melde ich mich an?",
     answer: () => ({
       text: [
         "Anmelden kannst du dich ganz einfach:",
@@ -81,7 +72,7 @@ export const intents: Intent[] = [
   },
   {
     id: "unterlagen",
-    keywords: ["unterlage", "dokument", "sehtest", "erste hilfe", "erste-hilfe", "passbild", "foto", "antrag", "fuehrerscheinstelle", "ausweis", "mitbringen", "brauche ich"],
+    label: "Welche Unterlagen brauche ich?",
     answer: () => {
       const step = steps.find((s) => s.title.startsWith("Unterlagen"))!
       return {
@@ -96,7 +87,7 @@ export const intents: Intent[] = [
   },
   {
     id: "alter",
-    keywords: ["alter", "alt", "jahre", "16", "17", "18", "minderjaehrig", "mindestalter", "ab wann", "welchem alter", "wie alt"],
+    label: "Ab welchem Alter geht's los?",
     answer: () => ({
       text: [
         `Klasse B: ab ${classB.minAge[0].value} Jahren.`,
@@ -108,7 +99,7 @@ export const intents: Intent[] = [
   },
   {
     id: "anfahrt",
-    keywords: ["wo", "adresse", "anfahrt", "standort", "finde", "karte", "huetten", "neugablonz", "strasse", "parken", "buero"],
+    label: "Wo finde ich euch?",
     answer: () => ({
       text: [
         `Theorieunterricht: ${theoryPlace}.`,
@@ -122,7 +113,7 @@ export const intents: Intent[] = [
   },
   {
     id: "fahrstunden",
-    keywords: ["fahrstunde", "stunden", "sonderfahrt", "autobahn", "ueberland", "nacht", "dunkel", "pflicht", "wie viele", "wieviel", "praxis"],
+    label: "Wie viele Fahrstunden brauche ich?",
     answer: () => {
       const s = classB.specialDrives!
       return {
@@ -137,7 +128,7 @@ export const intents: Intent[] = [
   },
   {
     id: "pruefung",
-    keywords: ["pruefung", "tuev", "durchfall", "bestehen", "bestanden", "praktisch", "theoretisch", "theoriepruefung"],
+    label: "Wie läuft die Prüfung ab?",
     answer: () => {
       const step = steps.find((s) => s.title.startsWith("Prüfung"))!
       return {
@@ -148,7 +139,7 @@ export const intents: Intent[] = [
   },
   {
     id: "lernen",
-    keywords: ["lern", "app", "online", "ueben", "plattform", "fahrschulcard", "zuhause"],
+    label: "Wie lerne ich für die Theorie?",
     answer: () => ({
       text: [
         `Neben dem Unterricht übst du online auf unserer Lernplattform (${site.learningPlatform.name}). So gibt es bei der Prüfung kein Nervenflattern, denn du kennst bereits alle Fragen.`,
@@ -161,19 +152,19 @@ export const intents: Intent[] = [
   },
   {
     id: "klassen",
-    keywords: ["klasse", "klassen", "fuehrerscheinklasse", "fuehrerscheinklassen", "angebot", "welche"],
+    label: "Welche Klassen gibt es?",
     answer: () => ({
       text: [
         "Diese Führerscheinklassen findest du bei uns" + (site.mock.enabled ? " (außer B/B17 derzeit Beispielinhalte)" : "") + ":",
         ...(["auto", "zweirad"] as const).map((cat) => `• ${categoryLabels[cat]}: ` + classes.filter((c) => c.category === cat).map((c) => c.code).join(", ")),
-        "Frag mich einfach nach einer Klasse, z. B. „Was kostet A2?“",
+        "Tippe unten auf eine Klasse für Details und Preise.",
       ],
       links: [{ label: "Alle Klassen", to: paths.klassen }],
     }),
   },
   {
     id: "team",
-    keywords: ["fahrlehrer", "team", "inhaber", "chef", "bubla", "vetter", "wer"],
+    label: "Wer sind die Fahrlehrer?",
     answer: () => ({
       text: ["Dein Team: " + team.map((m) => `${m.name} (${m.role}${m.since ? `, ${m.since.toLowerCase()}` : ""})`).join(" und ") + "."],
       links: [{ label: "Zum Team", to: paths.team }],
@@ -181,7 +172,7 @@ export const intents: Intent[] = [
   },
   {
     id: "kontakt",
-    keywords: ["telefon", "anruf", "nummer", "handy", "mail", "erreich", "kontakt", "fax", "whatsapp", "schreiben", "sprechen"],
+    label: "Wie erreiche ich euch?",
     answer: () => ({
       text: [`So erreichst du uns: ${contactLine}`, `Fax: ${site.fax}.`],
       links: [
@@ -190,19 +181,9 @@ export const intents: Intent[] = [
       ],
     }),
   },
-  {
-    id: "hallo",
-    keywords: ["hallo", "hi", "hey", "servus", "moin", "gruess", "guten tag", "guten abend"],
-    answer: () => ({ text: ["Hallo! Wobei kann ich dir helfen? Frag mich z. B. nach Theoriezeiten, Preisen oder der Anmeldung."] }),
-  },
-  {
-    id: "danke",
-    keywords: ["danke", "dankeschoen", "super", "perfekt", "cool", "top"],
-    answer: () => ({ text: ["Gern geschehen! Viel Spaß auf dem Weg zum Führerschein – Mit Spaß zum Erfolg! 🚗"] }),
-  },
 ]
 
-/** Eine Antwort je Führerscheinklasse – automatisch aus classes.ts */
+/** Antwort zu einer Führerscheinklasse – automatisch aus classes.ts */
 const classAnswer = (c: LicenseClass): AssistantAnswer => {
   const main = mainFee(c)
   return {
@@ -218,75 +199,15 @@ const classAnswer = (c: LicenseClass): AssistantAnswer => {
     ],
   }
 }
-intents.push(...classes.map((c) => ({ id: `klasse-${c.slug}`, keywords: c.keywords, answer: () => classAnswer(c) })))
 
-/** Ehrliche Rückfallantwort, wenn keine passende Information in den Inhalten steht */
-export const fallback = (): AssistantAnswer => ({
-  text: [
-    "Dazu habe ich auf unserer Website leider keine Angabe – und ich möchte dir nichts Falsches sagen.",
-    "Am besten fragst du uns direkt: " + contactLine,
-  ],
-  links: [
-    { label: `Anrufen: ${site.phone.display}`, to: site.phone.href },
-    { label: "E-Mail schreiben", to: `mailto:${site.email}` },
-  ],
-})
+/** Fragen zu den einzelnen Klassen (zweite Gruppe im Chat) */
+export const classQuestions: Question[] = classes.map((c) => ({
+  id: `klasse-${c.slug}`,
+  label: `${c.code} · ${c.code === "B17" ? "Begleitet ab 17" : c.name.replace(c.code, "").replace(/\bKlasse\b/, "").replace(/\s{2,}/g, " ").trim()}`,
+  answer: () => classAnswer(c),
+}))
 
-/** Text vereinheitlichen: klein, Umlaute ausgeschrieben, Satzzeichen als Leerzeichen */
-export function normalize(input: string) {
-  return (
-    " " +
-    input
-      .toLowerCase()
-      .replace(/ä/g, "ae")
-      .replace(/ö/g, "oe")
-      .replace(/ü/g, "ue")
-      .replace(/ß/g, "ss")
-      .replace(/€/g, " € ")
-      .replace(/[.,!?;:()"'„“]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim() +
-    " "
-  )
-}
-
-/**
- * Findet die passende Antwort. Jedes Wort zählt für das spezifischste (längste) passende
- * Stichwort; kurze Stichwörter (unter 4 Zeichen) müssen als ganzes Wort vorkommen.
- * Die Absicht mit den meisten Punkten gewinnt.
- */
-export function answerFor(input: string): { intent: string | null; answer: AssistantAnswer } {
-  const text = normalize(input)
-  const words = text.trim().split(" ").filter(Boolean)
-  const scores = new Map<string, number>()
-  const add = (id: string, n: number) => scores.set(id, (scores.get(id) ?? 0) + n)
-
-  // Genannte Klassenkürzel („A2“, „BE“ …) haben Vorrang – außer „am“ (auch Präposition)
-  const codes = new Map(classes.filter((c) => c.code !== "AM").map((c) => [c.code.toLowerCase(), `klasse-${c.slug}`]))
-  for (const word of words) if (codes.has(word)) add(codes.get(word)!, 12)
-
-  for (const word of words) {
-    let best: { id: string; len: number } | null = null
-    for (const intent of intents) {
-      for (const k of intent.keywords) {
-        if (k.includes(" ")) continue
-        const hit = k.length < 4 ? word === k : word.includes(k)
-        if (hit && (!best || k.length > best.len)) best = { id: intent.id, len: k.length }
-      }
-    }
-    if (best) add(best.id, best.len)
-  }
-  // Mehrwort-Stichwörter („erste hilfe“, „wie viele“) über den ganzen Text
-  for (const intent of intents) {
-    for (const k of intent.keywords) if (k.includes(" ") && text.includes(` ${k} `)) add(intent.id, k.length)
-  }
-
-  let winner: string | null = null
-  for (const [id, score] of scores) if (!winner || score > scores.get(winner)!) winner = id
-  if (!winner) return { intent: null, answer: fallback() }
-  return { intent: winner, answer: answerForIntent(winner) }
-}
-
-export function answerForIntent(id: string): AssistantAnswer {
-  return intents.find((i) => i.id === id)?.answer() ?? fallback()
-}
+export const questionGroups: { title: string; questions: Question[] }[] = [
+  { title: "Häufige Fragen", questions: generalQuestions },
+  { title: "Zu einer Klasse", questions: classQuestions },
+]

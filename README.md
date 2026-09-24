@@ -22,7 +22,7 @@ Design „Allgäu-Blau“: Bubla-Blau `#005BA4`, Logo-Gelb `#F8E322`, Tiefblau `
 npm install          # Abhängigkeiten installieren
 npm run dev          # Entwicklungsserver auf http://localhost:5173
 npm run build        # Produktions-Build nach build/client (HTML je Seite + sitemap.xml + 404.html)
-npm run preview      # Build lokal testen auf http://localhost:4173
+npm run preview      # Build lokal testen auf http://localhost:4180
 npm run typecheck    # TypeScript prüfen
 npm test             # Playwright-Tests (vorher npm run build; einmalig: npx playwright install chromium webkit)
 ```
@@ -38,7 +38,7 @@ Alle Texte und Daten liegen getrennt vom Design in `app/content/`:
 | `info.ts` | Texte der alten Seite, Ablauf in 5 Schritten, FAQ, Theoriethemen, B17-Zeitleiste |
 | `team.ts` | Teammitglieder und Foto |
 | `legal.ts` | Impressum und Datenschutz (wörtlich übernommen), Muster-AGB |
-| `assistant.ts` | Fahrschul-Assistent: Stichwörter und Antworten (bauen sich aus den anderen Dateien zusammen) |
+| `assistant.ts` | Fahrschul-Assistent: Fragen zum Antippen und Antworten (bauen sich aus den anderen Dateien zusammen; Klassenfragen entstehen automatisch) |
 
 - **Preis ändern:** in `classes.ts` beim passenden Eintrag `price` anpassen. `null` zeigt „auf Anfrage“.
 - **Klasse hinzufügen/entfernen:** Eintrag in `classes` ergänzen oder löschen – Route, Menü, Footer, Galerie, Preistabelle, Sitemap und Assistent passen sich automatisch an.
@@ -69,7 +69,7 @@ SEO je Seite: Titel und Beschreibung (bisherige Werte übernommen und je Seite e
 
 ## Funktionen
 
-- **Fahrschul-Assistent** (unten rechts): regelbasiert, läuft komplett im Browser, keine externen Dienste. Antwortet nur mit Angaben aus `app/content/`, sonst ehrliche Rückfallantwort mit Kontaktdaten.
+- **Fahrschul-Assistent** (unten rechts): alle Fragen zum Antippen direkt sichtbar (häufige Fragen + eine Frage je Klasse), kein Freitext, keine KI, keine externen Dienste. Antwortet nur mit Angaben aus `app/content/`. Neue Frage: Eintrag in `generalQuestions` in `assistant.ts`.
 - **Anmeldung:** Das Formular öffnet eine vorausgefüllte E-Mail an die Fahrschule (kein Server nötig). Für direkten Versand `onSubmit` in `app/routes/anmeldung.tsx` an einen Formulardienst anbinden.
 - **Google Maps** mit 2-Klick-Lösung – vorher fließen keine Daten an Google.
 - Barrierefreiheit: Skip-Link, Tastaturbedienung, `aria`-Zustände, „Bewegung reduzieren“ wird respektiert.
@@ -118,4 +118,4 @@ Netlify/Vercel/Cloudflare Pages: Build-Befehl `npm run build`, Ausgabeordner `bu
 - alle Seiten auf 320, 375, 390, 402×874, 768, 1024, 1440 und 1920 px: keine Überbreite, kein abgeschnittener Text (gemessen an den gezeichneten Textzeilen), keine JS-/Hydration-Fehler – auch mit „Bewegung reduzieren“
 - interne/externe Links, Sprungmarken, Bilder, PDF, Sitemap, robots.txt, 404, SEO-Tags
 - Menüs, Klassen-Flyout, Filter, FAQ, Formular, Karte, Assistent, Sprungmarken-Versatz, Hero-Karte, Zähler
-- Erkennungslogik des Assistenten
+- Vollständigkeit des Assistenten (jede Frage mit Antwort und gültigen Links, jede Klasse vertreten)

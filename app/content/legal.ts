@@ -218,7 +218,7 @@ export const datenschutz: LegalBlock[] = [
   { type: "h3", text: "Fahrschul-Assistent und Anmeldeformular" },
   {
     type: "p",
-    text: "Der Fahrschul-Assistent auf dieser Website läuft vollständig in Ihrem Browser; Ihre Eingaben werden nicht an uns oder Dritte übertragen. Das Anmeldeformular öffnet lediglich Ihr eigenes E-Mail-Programm mit einer vorausgefüllten Nachricht – es gilt der Abschnitt „Anfrage per E-Mail, Telefon oder Telefax“.",
+    text: "Der Fahrschul-Assistent auf dieser Website läuft vollständig in Ihrem Browser; Ihre Auswahl wird nicht an uns oder Dritte übertragen. Das Anmeldeformular öffnet lediglich Ihr eigenes E-Mail-Programm mit einer vorausgefüllten Nachricht – es gilt der Abschnitt „Anfrage per E-Mail, Telefon oder Telefax“.",
   },
 ]
 
