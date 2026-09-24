@@ -82,13 +82,13 @@ SEO je Seite: Titel und Beschreibung (bisherige Werte übernommen und je Seite e
 | Datei | Quelle |
 | --- | --- |
 | `stock/allgaeu-wiese.webp` | [pexels.com/photo/32488279](https://www.pexels.com/photo/32488279/) |
-| `stock/alpenstrasse.webp` | [pexels.com/photo/29537935](https://www.pexels.com/photo/29537935/) |
 | `stock/anhaenger.webp` | [pexels.com/photo/10304035](https://www.pexels.com/photo/10304035/) |
 | `stock/autobahn.webp` | [pexels.com/photo/31390896](https://www.pexels.com/photo/31390896/) |
 | `stock/fahrerin-laechelt.webp` | [pexels.com/photo/6817008](https://www.pexels.com/photo/6817008/) |
 | `stock/fahrerin-lenkrad.webp` | [pexels.com/photo/6816982](https://www.pexels.com/photo/6816982/) |
 | `stock/fahrerperspektive.webp` | [pexels.com/photo/31627608](https://www.pexels.com/photo/31627608/) |
 | `stock/fahrstunde.webp` | [pexels.com/photo/9518031](https://www.pexels.com/photo/9518031/) |
+| `stock/golf-landstrasse.webp` | [pexels.com/photo/10843557](https://www.pexels.com/photo/10843557/) |
 | `stock/helm-motorrad.webp` | [pexels.com/photo/17506580](https://www.pexels.com/photo/17506580/) |
 | `stock/lernen-app.webp` | [pexels.com/photo/1462631](https://www.pexels.com/photo/1462631/) |
 | `stock/motorrad-bergstrasse.webp` | [pexels.com/photo/29244519](https://www.pexels.com/photo/29244519/) |

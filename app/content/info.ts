@@ -10,7 +10,7 @@ import { site } from "./site"
 
 /** Quelle: alte Startseite */
 export const about =
-  "Bei Fahrschule Bubla aus Kaufbeuren wird Spaß und Fairness optimal mit Erfahrung und Kompetenz verbunden. Durch die lockere, freundliche Atmosphäre sowie unsere Offenheit untereinander wird die Ausbildung in unserer Fahrschule zu einem kurzweiligen, lehrreichen Erlebnis, welches dann mit der bestandenen Fahrerlaubnis positiv in Erinnerung bleibt."
+  "Bei Fahrschule Bubla aus Kaufbeuren wird Spaß und Fairness optimal mit Erfahrung und Kompetenz verbunden."
 
 /** Quelle: alte Startseite (drei Säulen „Modern – Qualität – Support“) */
 export const pillars = [

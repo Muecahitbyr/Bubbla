@@ -7,7 +7,7 @@ import { AnimatedWords } from "../ui/animated-headline"
 import { ButtonLink } from "../ui/button"
 
 /** Wird auch in root.tsx vorgeladen – beide Stellen müssen dasselbe Bild nennen */
-export const HERO_IMAGE = "/images/stock/alpenstrasse.webp"
+export const HERO_IMAGE = "/images/stock/golf-landstrasse.webp"
 
 /** Handy: Oberkante (unter der schwebenden Navigation) und Seitenverhältnis (Höhe/Breite) des Bild-Bands */
 const MOBILE_BAND_TOP = 72
@@ -33,6 +33,8 @@ export function HomeHero() {
   const boxSide = useMotionValue(0)
   const boxH = useMotionValue("100%")
   const boxRadius = useMotionValue(0)
+  // Desktop: Foto im Startzustand so verschieben, dass das Motiv mittig in der Karte sitzt
+  const imgShift = useMotionValue(0)
   // Karte erst einblenden, wenn sie gemessen ist – sonst springt sie beim Laden
   const cardOpacity = useMotionValue(0)
 
@@ -44,6 +46,7 @@ export function HomeHero() {
       boxSide.set(0)
       boxH.set("100%")
       boxRadius.set(0)
+      imgShift.set(((top + (vh - bottom)) / 2 - vh / 2) * (1 - t))
       clipPath.set(`inset(${top * (1 - t)}px ${side * (1 - t)}px ${bottom * (1 - t)}px ${side * (1 - t)}px round ${32 * (1 - t)}px)`)
       return
     }
@@ -53,11 +56,12 @@ export function HomeHero() {
     const startH = Math.max(140, Math.min((vw - 2 * side) * 0.95, vh - top - 24))
     const endH = vw * MOBILE_BAND_RATIO
     clipPath.set("none")
+    imgShift.set(0)
     boxTop.set(lerp(top, MOBILE_BAND_TOP))
     boxSide.set(lerp(side, 0))
     boxH.set(`${lerp(startH, endH)}px`)
     boxRadius.set(lerp(26, 0))
-  }, [p, reduce, clipPath, boxTop, boxSide, boxH, boxRadius])
+  }, [p, reduce, clipPath, boxTop, boxSide, boxH, boxRadius, imgShift])
   useMotionValueEvent(p, "change", update)
 
   useEffect(() => {
@@ -119,9 +123,9 @@ export function HomeHero() {
         >
           <motion.img
             src={HERO_IMAGE}
-            alt="Kurvige Straße durch ein grünes Alpental"
-            style={{ scale: imgScale }}
-            className="h-full w-full object-cover object-[center_62%]"
+            alt="VW Golf fährt auf einer Landstraße"
+            style={{ scale: imgScale, y: imgShift }}
+            className="h-full w-full object-cover object-[55%_58%]"
             fetchPriority="high"
             decoding="async"
           />
