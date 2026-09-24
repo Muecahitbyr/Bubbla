@@ -7,14 +7,14 @@ Neuauflage von [fahrschule-bubla.de](http://fahrschule-bubla.de) als modernes Re
 | Bereich | Werkzeug |
 | --- | --- |
 | Framework | React 19 + React Router 8 (Framework-Modus, `ssr: false`, **jede Seite als statisches HTML vorgerendert**) |
-| Styling | Tailwind CSS 4, Design-Tokens als CSS-Variablen in `app/app.css`, Sektionsfarben über `tone-paper`, `tone-mist`, `tone-night`, `tone-blue` |
+| Styling | Tailwind CSS 4, Design-Tokens als CSS-Variablen in `app/app.css`, Sektionsfarben über `tone-sun` (Gelb), `tone-mist` (Cremegelb), `tone-paper` (Weiß), `tone-night` (Tiefblau) |
 | Animationen | Motion (Hero-Zoom, Scroll-Sequenz, Parallax, Bild-Reveal, horizontale Galerie, Wort-für-Wort-Text, Zähler, Zeitleiste) |
 | Smooth Scrolling | Lenis (aus bei „Bewegung reduzieren“) |
 | Schrift | Plus Jakarta Sans, lokal über @fontsource (kein Google-Fonts-Aufruf) |
 | Icons | lucide-react |
 | Tests | Playwright (Chromium + WebKit/Safari) |
 
-Design „Allgäu-Blau“: Bubla-Blau `#005BA4`, Logo-Gelb `#F8E322`, Tiefblau `#061C33`, schwebende Pill-Navigation, Klassen als Kfz-Kennzeichen, Fortschritt als gelbe Fahrbahnmarkierung.
+Design: **Bubla-Gelb `#F8E322` als Hauptfarbe** (Hero, Seitenköpfe, Abschluss-Block, Buttons, Cremegelb für Zwischenflächen), Tiefblau `#061C33` und Bubla-Blau `#005BA4` für Text, Links und Kontrast. Buttons auf gelben Flächen werden automatisch tiefblau (CSS-Variablen `--btn-bg` usw. in `app/app.css`). Dazu schwebende Pill-Navigation, Klassen als Kfz-Kennzeichen, Fortschritt als Fahrbahnmarkierung.
 
 ## Befehle
 

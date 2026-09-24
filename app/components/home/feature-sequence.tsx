@@ -69,7 +69,7 @@ export function FeatureSequence({ chapters, label }: { chapters: Chapter[]; labe
             <ol className="mt-8 flex gap-2 md:mt-10" aria-hidden>
               {chapters.map((c, i) => (
                 <li key={c.title} className="bg-tile-2 h-[5px] flex-1 overflow-hidden rounded-full">
-                  <span className="bg-sun block h-full rounded-full" style={{ width: i < active ? "100%" : i === active ? `${local * 100}%` : "0%" }} />
+                  <span className="block h-full rounded-full bg-[var(--progress)]" style={{ width: i < active ? "100%" : i === active ? `${local * 100}%` : "0%" }} />
                 </li>
               ))}
             </ol>

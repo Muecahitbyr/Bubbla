@@ -85,11 +85,11 @@ export function ClassShowcase() {
           {cards.map((item) => (
             <ClassCard key={item.path} item={item} className={cardSize} />
           ))}
-          <Link to={paths.preise} className={`group tone-blue flex aspect-[3/4] flex-col justify-between rounded-[26px] p-7 ${cardSize}`}>
+          <Link to={paths.preise} className={`group tone-sun flex aspect-[3/4] flex-col justify-between rounded-[26px] p-7 ${cardSize}`}>
             <span className="kicker">Preise</span>
             <span>
-              <span className="display-sm block text-white">Keine Fahrstunde zu viel. Keine Gebühr zu viel.</span>
-              <span className="text-sun mt-6 inline-flex items-center gap-1.5 text-[16px] font-bold">
+              <span className="display-sm block">Keine Fahrstunde zu viel. Keine Gebühr zu viel.</span>
+              <span className="mt-6 inline-flex items-center gap-1.5 text-[16px] font-bold underline decoration-2 underline-offset-4">
                 Alle Preise ansehen
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
               </span>
@@ -100,7 +100,7 @@ export function ClassShowcase() {
         {pinned && (
           <div className="wrap mt-10">
             <div className="bg-tile-2 h-[5px] w-full overflow-hidden rounded-full">
-              <motion.div className="bg-sun h-full rounded-full" style={{ width: progress }} />
+              <motion.div className="h-full rounded-full bg-[var(--progress)]" style={{ width: progress }} />
             </div>
           </div>
         )}

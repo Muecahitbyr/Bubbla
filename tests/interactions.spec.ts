@@ -132,6 +132,10 @@ test("Fahrschul-Assistent: alle Fragen sichtbar, kein Eingabefeld, Antworten, Es
   // Fragen stehen danach wieder vollständig bereit
   await expect(general).toHaveCount(await general.count())
 
+  // Dieselbe Frage bleibt antippbar und liefert erneut die Antwort
+  await dialog.getByRole("button", { name: "Wann ist Theorieunterricht?" }).click()
+  await expect(dialog.getByText(/immer von 19:00 – 20:30 Uhr/)).toHaveCount(2)
+
   await dialog.getByRole("button", { name: /^A2 · / }).click()
   await expect(dialog.getByText(/Motorrad Klasse A2: Ab 18/)).toBeVisible()
 

@@ -82,7 +82,7 @@ export function Navbar() {
                       className={({ isActive }) =>
                         cn(
                           "inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[14px] font-semibold tracking-[-0.01em] transition-colors",
-                          isActive || (isKlassen && klassenActive) ? "bg-mist text-bubla" : "text-ink/75 hover:bg-black/[0.04] hover:text-ink",
+                          isActive || (isKlassen && klassenActive) ? "bg-sun text-ink" : "text-ink/75 hover:bg-mist hover:text-ink",
                         )
                       }
                     >

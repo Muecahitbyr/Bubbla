@@ -119,9 +119,9 @@ export function HomeHero() {
   const overlayY = useTransform(() => (1 - range(0.5, 0.72)) * 36)
 
   return (
-    <section ref={ref} className="tone-paper relative h-[240vh]" aria-label="Willkommen">
+    <section ref={ref} className="tone-sun relative h-[240vh]" aria-label="Willkommen">
       <div className="sticky top-0 h-svh overflow-hidden">
-        <div aria-hidden className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-[#e6f0fb] to-transparent" />
+        <div aria-hidden className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-white/35 to-transparent" />
 
         <motion.div
           className="absolute overflow-hidden will-change-[clip-path]"

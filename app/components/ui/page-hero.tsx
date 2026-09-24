@@ -39,8 +39,8 @@ export function PageHero({
   })
 
   return (
-    <header className="tone-paper relative overflow-hidden pt-[calc(var(--nav-offset)+var(--subnav-h)+2.5rem)] md:pt-[calc(var(--nav-offset)+var(--subnav-h)+4.5rem)]">
-      <div aria-hidden className="pointer-events-none absolute -top-48 -right-40 size-[640px] rounded-full opacity-60 blur-[90px]" style={{ background: "radial-gradient(closest-side, rgb(3 101 225 / 0.18), transparent)" }} />
+    <header className="tone-sun relative overflow-hidden pt-[calc(var(--nav-offset)+var(--subnav-h)+2.5rem)] md:pt-[calc(var(--nav-offset)+var(--subnav-h)+4.5rem)]">
+      <div aria-hidden className="pointer-events-none absolute -top-48 -right-40 size-[640px] rounded-full opacity-60 blur-[90px]" style={{ background: "radial-gradient(closest-side, rgb(255 255 255 / 0.55), transparent)" }} />
       <div className="wrap relative">
         {breadcrumbs && (
           <motion.nav {...fade(0)} aria-label="Brotkrumen" className="text-muted mb-6 flex flex-wrap items-center gap-1 text-[13px] font-medium">

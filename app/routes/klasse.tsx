@@ -195,11 +195,11 @@ function Training({ c }: { c: LicenseClass }) {
         </Stagger>
 
         {s && (
-          <Reveal className="tone-blue mt-5 rounded-[26px] p-7 md:p-10" >
+          <Reveal className="tone-sun mt-5 rounded-[26px] p-7 md:p-10">
             <div id="sonderfahrten" className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <p className="kicker">Sonderfahrten</p>
-                <p className="mt-4 text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight font-extrabold tracking-[-0.03em] text-white">
+                <p className="mt-4 text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight font-extrabold tracking-[-0.03em]">
                   {specialDriveTotal(s)} Pflichtstunden à 45 Minuten
                 </p>
               </div>
@@ -210,8 +210,8 @@ function Training({ c }: { c: LicenseClass }) {
                   [s.dunkelheit, "Dunkelheit"],
                 ].map(([n, l]) => (
                   <li key={l}>
-                    <span className="text-sun block text-[clamp(2.6rem,5vw,4rem)] leading-none font-extrabold tabular-nums">{n}</span>
-                    <span className="mt-1 block text-[14px] font-semibold text-white/80">{l}</span>
+                    <span className="text-bubla block text-[clamp(2.6rem,5vw,4rem)] leading-none font-extrabold tabular-nums">{n}</span>
+                    <span className="text-muted mt-1 block text-[14px] font-semibold">{l}</span>
                   </li>
                 ))}
               </ul>

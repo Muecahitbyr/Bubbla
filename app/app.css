@@ -3,8 +3,8 @@
 @import "lenis/dist/lenis.css";
 
 /* ================================================================== */
-/*  Design-Tokens „Allgäu-Blau“                                        */
-/*  Blau & Gelb aus dem Bubla-Logo, Tiefblau für ruhige dunkle Flächen */
+/*  Design-Tokens: Bubla-Gelb als Hauptfarbe                           */
+/*  Gelb für große Flächen & Aktionen, Blau/Tiefblau für Text & Kontrast */
 /* ================================================================== */
 
 @theme {
@@ -17,7 +17,7 @@
   --color-sun-deep: #e8c900;
   --color-night: #061c33; /* Tiefblau für dunkle Sektionen */
   --color-ink: #0b1b2b;
-  --color-mist: #eef4fb;
+  --color-mist: #fff6c4; /* zartes Gelb für kleine Flächen (Chat, Menü-Hover) */
 
   --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -48,13 +48,14 @@
   color-scheme: light;
 }
 
+/* Zartes Cremegelb für ruhige Zwischenflächen */
 .tone-mist {
-  --bg: #eef4fb;
+  --bg: #fff8d9;
   --tile: #ffffff;
-  --tile-2: #dde8f5;
+  --tile-2: #ede5c3;
   --fg: #0b1b2b;
-  --muted: #4f6076;
-  --line: rgb(0 91 164 / 0.14);
+  --muted: #5a5337;
+  --line: rgb(107 90 0 / 0.16);
   --accent: #005ba4;
   --ink-a: #0b1b2b;
   --ink-b: #1d4e80;
@@ -75,24 +76,47 @@
   color-scheme: dark;
 }
 
-/* Kräftiges Bubla-Blau für Signalflächen */
-.tone-blue {
-  --bg: #005ba4;
-  --tile: #0a67b3;
-  --tile-2: #1373bf;
-  --fg: #ffffff;
-  --muted: #cfe0f1;
-  --line: rgb(255 255 255 / 0.2);
-  --accent: #f8e322;
-  --ink-a: #ffffff;
-  --ink-b: #d8e7f6;
-  color-scheme: dark;
+/* Bubla-Gelb – Hauptfarbe für große Flächen (Hero, Seitenköpfe, Abschluss-Block) */
+.tone-sun {
+  --bg: #f8e322;
+  --tile: #fdf29a;
+  --tile-2: #efd600;
+  --fg: #0b1b2b;
+  --muted: #564d00;
+  --line: rgb(11 27 43 / 0.16);
+  --accent: #0b1b2b;
+  --ink-a: #0b1b2b;
+  --ink-b: #1d4e80;
+  color-scheme: light;
+}
+
+/* Kontextfarben: Buttons, Fahrbahn-Striche und Fortschrittsbalken passen sich der Fläche an
+   (auf Gelb wird aus dem gelben Button automatisch ein tiefblauer) */
+:root,
+.tone-paper,
+.tone-mist,
+.tone-night {
+  --btn-bg: #f8e322;
+  --btn-fg: #0b1b2b;
+  --btn-shadow: rgb(232 201 0 / 0.9);
+  --lane-color: #f8e322;
+  --progress: #f8e322;
+}
+.tone-mist {
+  --progress: #061c33;
+}
+.tone-sun {
+  --btn-bg: #061c33;
+  --btn-fg: #ffffff;
+  --btn-shadow: rgb(6 28 51 / 0.45);
+  --lane-color: #0b1b2b;
+  --progress: #061c33;
 }
 
 .tone-paper,
 .tone-mist,
 .tone-night,
-.tone-blue {
+.tone-sun {
   background-color: var(--bg);
   color: var(--fg);
 }
@@ -179,8 +203,7 @@
     outline-offset: 3px;
     border-radius: 10px;
   }
-  .tone-night :focus-visible,
-  .tone-blue :focus-visible {
+  .tone-night :focus-visible {
     outline-color: var(--color-sun);
   }
 }
@@ -233,7 +256,7 @@
     width: 1.9em;
     height: 3px;
     border-radius: 2px;
-    background: var(--color-sun);
+    background: var(--lane-color);
     flex-shrink: 0;
   }
 }
@@ -368,7 +391,7 @@
 /* Gestrichelte Fahrbahnmarkierung (z. B. als Trenner) */
 @utility lane {
   height: 4px;
-  background-image: repeating-linear-gradient(90deg, var(--color-sun) 0 28px, transparent 28px 44px);
+  background-image: repeating-linear-gradient(90deg, var(--lane-color) 0 28px, transparent 28px 44px);
   border-radius: 2px;
 }
 

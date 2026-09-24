@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { ArrowUpRight, Check, MessageCircle, X } from "lucide-react"
+import { ArrowUpRight, MessageCircle, X } from "lucide-react"
 import { useEffect, useId, useRef, useState } from "react"
 import { Link, useLocation } from "react-router"
 import { greeting, questionGroups, type AssistantAnswer, type AssistantLink, type Question } from "~/content/assistant"
@@ -16,7 +16,6 @@ export function Assistant() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([{ id: 0, from: "bot", answer: greeting }])
   const [typing, setTyping] = useState(false)
-  const [asked, setAsked] = useState<Set<string>>(new Set())
   const nextId = useRef(1)
   const listRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -61,10 +60,8 @@ export function Assistant() {
     if (last) el.scrollTo({ top: last.offsetTop - 12, behavior: reduce ? "auto" : "smooth" })
   }, [messages, typing, reduce])
 
-  const ask = (q: Question) => {
-    setAsked((a) => new Set(a).add(q.id))
-    reply(q.label, q.answer())
-  }
+  // Jede Frage bleibt jederzeit antippbar und sieht immer gleich aus
+  const ask = (q: Question) => reply(q.label, q.answer())
 
   const reply = (question: string, answer: AssistantAnswer) => {
     setMessages((m) => [...m, { id: nextId.current++, from: "user", text: question }])
@@ -146,23 +143,16 @@ export function Assistant() {
                     <div key={g.title} role="group" aria-label={g.title}>
                       <p className="text-muted mb-2 text-[12px] font-bold tracking-[0.08em] uppercase">{g.title}</p>
                       <div className="flex flex-wrap gap-2">
-                        {g.questions.map((q) => {
-                          const done = asked.has(q.id)
-                          return (
-                            <button
-                              key={q.id}
-                              type="button"
-                              onClick={() => ask(q)}
-                              className={cn(
-                                "inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-left text-[13.5px] leading-tight font-semibold transition-colors",
-                                done ? "text-muted bg-white ring-1 ring-black/10 hover:bg-mist" : "bg-mist text-bubla hover:bg-tile-2",
-                              )}
-                            >
-                              {done && <Check className="size-3.5 shrink-0" aria-hidden />}
-                              {q.label}
-                            </button>
-                          )
-                        })}
+                        {g.questions.map((q) => (
+                          <button
+                            key={q.id}
+                            type="button"
+                            onClick={() => ask(q)}
+                            className="bg-sun text-ink rounded-full px-3.5 py-2 text-left text-[13.5px] leading-tight font-semibold transition-[filter,transform] hover:brightness-95 active:scale-[0.97]"
+                          >
+                            {q.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   ))}
@@ -181,10 +171,10 @@ export function Assistant() {
         aria-label={open ? "Fahrschul-Assistent schließen" : "Fahrschul-Assistent öffnen"}
         className={cn(
           "fixed right-3 bottom-3 z-[60] inline-flex h-12 items-center gap-2 rounded-full pr-4 pl-3.5 font-bold md:pr-5 md:pl-4 shadow-[0_16px_40px_-12px_rgb(6_28_51/0.55)] transition-all duration-300 active:scale-95 md:right-5 md:bottom-5 md:h-[60px]",
-          open ? "bg-night text-white" : "bg-sun text-ink hover:-translate-y-0.5",
+          open ? "bg-night text-white" : "bg-night text-white ring-2 ring-white/70 hover:-translate-y-0.5",
         )}
       >
-        {open ? <X className="size-5" aria-hidden /> : <MessageCircle className="size-5" aria-hidden />}
+        {open ? <X className="size-5" aria-hidden /> : <MessageCircle className="text-sun size-5" aria-hidden />}
         <span className="text-[14px] md:text-[15px]">{open ? "Schließen" : "Fragen?"}</span>
       </button>
     </>
@@ -196,7 +186,7 @@ const lastUserIndex = (messages: Message[]) => messages.map((m) => m.from).lastI
 function UserBubble({ text, last }: { text: string; last: boolean }) {
   return (
     <div className="flex justify-end" data-last-question={last || undefined}>
-      <p className="bg-bubla max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5 text-[15px] text-white">{text}</p>
+      <p className="bg-night max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5 text-[15px] text-white">{text}</p>
     </div>
   )
 }
