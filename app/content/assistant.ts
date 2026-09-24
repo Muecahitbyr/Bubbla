@@ -174,7 +174,7 @@ export const generalQuestions: Question[] = [
     id: "kontakt",
     label: "Wie erreiche ich euch?",
     answer: () => ({
-      text: [`So erreichst du uns: ${contactLine}`, `Fax: ${site.fax}.`],
+      text: [`So erreichst du uns: ${contactLine}`],
       links: [
         { label: `Anrufen: ${site.phone.display}`, to: site.phone.href },
         { label: "E-Mail schreiben", to: `mailto:${site.email}` },

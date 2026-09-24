@@ -33,7 +33,7 @@ Alle Texte und Daten liegen getrennt vom Design in `app/content/`:
 
 | Datei | Inhalt |
 | --- | --- |
-| `site.ts` | Name, Adressen (Büro + Theorieraum), Telefon, E-Mail, Fax, Theoriezeiten, Bürozeiten, Termine (`news`), Navigation, Schalter für Beispieldaten |
+| `site.ts` | Name, Adressen (Büro + Theorieraum), Telefon, E-Mail, Theoriezeiten, Bürozeiten, Termine (`news`), Navigation, Schalter für Beispieldaten |
 | `classes.ts` | **Einzige Quelle für Preise** und alle Führerscheinklassen. Preisseite, Klassenseiten, Startseite und Assistent lesen daraus |
 | `info.ts` | Texte der alten Seite, Ablauf in 5 Schritten, FAQ, Theoriethemen, B17-Zeitleiste |
 | `team.ts` | Teammitglieder und Foto |

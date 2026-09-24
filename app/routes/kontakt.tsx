@@ -1,4 +1,4 @@
-import { Clock, Mail, Phone, Printer, Smartphone } from "lucide-react"
+import { Clock, Mail, Phone, Smartphone } from "lucide-react"
 import type { MetaFunction } from "react-router"
 import { LocalNav } from "~/components/layout/local-nav"
 import { ButtonLink } from "~/components/ui/button"
@@ -22,7 +22,6 @@ const channels = [
   { icon: Phone, label: "Telefon", value: site.phone.display, href: site.phone.href },
   { icon: Smartphone, label: "Mobil", value: site.mobile.display, href: site.mobile.href },
   { icon: Mail, label: "E-Mail", value: site.email, href: `mailto:${site.email}` },
-  { icon: Printer, label: "Fax", value: site.fax },
 ]
 
 export default function Kontakt() {
@@ -47,7 +46,7 @@ export default function Kontakt() {
 
       <Section id="erreichbarkeit" space="md">
         <div className="wrap">
-          <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="grid gap-4 md:grid-cols-3">
             {channels.map((c) => {
               const inner = (
                 <>

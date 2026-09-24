@@ -22,7 +22,6 @@ export const impressum: LegalBlock[] = [
       "Christian Bubla",
       "Mob.: +49 (0) 170 - 73 73 73 9",
       "Tel.: +49 (0) 8341 - 70 84",
-      "Fax: +49 (0) 8314 -96 02 27 3",
       "E-Mail: fahrschule-bubla@gmx.de",
     ],
   },
@@ -194,10 +193,10 @@ export const datenschutz: LegalBlock[] = [
     type: "p",
     text: "Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website – hierzu müssen die Server-Log-Files erfasst werden.",
   },
-  { type: "h3", text: "Anfrage per E-Mail, Telefon oder Telefax" },
+  { type: "h3", text: "Anfrage per E-Mail oder Telefon" },
   {
     type: "p",
-    text: "Wenn Sie uns per E-Mail, Telefon oder Telefax kontaktieren, wird Ihre Anfrage inklusive aller daraus hervorgehenden personenbezogenen Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres Anliegens bei uns gespeichert und verarbeitet. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.",
+    text: "Wenn Sie uns per E-Mail oder Telefon kontaktieren, wird Ihre Anfrage inklusive aller daraus hervorgehenden personenbezogenen Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres Anliegens bei uns gespeichert und verarbeitet. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.",
   },
   {
     type: "p",
@@ -218,7 +217,7 @@ export const datenschutz: LegalBlock[] = [
   { type: "h3", text: "Fahrschul-Assistent und Anmeldeformular" },
   {
     type: "p",
-    text: "Der Fahrschul-Assistent auf dieser Website läuft vollständig in Ihrem Browser; Ihre Auswahl wird nicht an uns oder Dritte übertragen. Das Anmeldeformular öffnet lediglich Ihr eigenes E-Mail-Programm mit einer vorausgefüllten Nachricht – es gilt der Abschnitt „Anfrage per E-Mail, Telefon oder Telefax“.",
+    text: "Der Fahrschul-Assistent auf dieser Website läuft vollständig in Ihrem Browser; Ihre Auswahl wird nicht an uns oder Dritte übertragen. Das Anmeldeformular öffnet lediglich Ihr eigenes E-Mail-Programm mit einer vorausgefüllten Nachricht – es gilt der Abschnitt „Anfrage per E-Mail oder Telefon“.",
   },
 ]
 

@@ -29,8 +29,6 @@ export const site = {
 
   phone: { display: "08341 7084", href: "tel:+4983417084", international: "+49 8341 7084" },
   mobile: { display: "0170 7373739", href: "tel:+491707373739", international: "+49 170 7373739" },
-  /** Fax laut Kontaktseite (im Impressum steht eine abweichende Nummer) */
-  fax: "08341 9962163",
   email: "fahrschule-bubla@gmx.de",
 
   hours: {

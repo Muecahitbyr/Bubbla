@@ -19,7 +19,6 @@ const drivingSchool = {
   slogan: site.claim,
   url: site.url,
   telephone: site.phone.international,
-  faxNumber: site.fax,
   email: site.email,
   image: `${site.url}/og-image.jpg`,
   logo: `${site.url}/images/logo.png`,
