@@ -144,10 +144,10 @@ export function HomeHero() {
           <div className="grid items-end gap-6 lg:grid-cols-12 lg:gap-10">
             <h1 className="display-xl lg:col-span-8">
               <span className="grad-ink -mb-[0.16em] block pb-[0.16em]">
-                <AnimatedWords text="Mit Spaß" delay={0.1} />
+                <AnimatedWords text="Fahrschule" delay={0.1} />
               </span>
               <span className="grad-blue -mb-[0.16em] block pb-[0.16em]">
-                <AnimatedWords text="zum Erfolg." delay={0.25} />
+                <AnimatedWords text={`${site.name.replace("Fahrschule ", "")}.`} delay={0.25} />
               </span>
             </h1>
             <motion.div
