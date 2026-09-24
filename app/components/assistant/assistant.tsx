@@ -19,7 +19,7 @@ export function Assistant() {
   const [typing, setTyping] = useState(false)
   const nextId = useRef(1)
   const listRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const reduce = useReducedMotion()
   const titleId = useId()
@@ -30,15 +30,27 @@ export function Assistant() {
 
   useEffect(() => {
     if (!open) return
-    inputRef.current?.focus()
+    // Fokus aufs Chatfenster, nicht ins Eingabefeld – so öffnet sich auf dem Handy
+    // keine Tastatur. Die Tastatur erscheint erst, wenn man ins Eingabefeld tippt.
+    panelRef.current?.focus({ preventScroll: true })
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpen(false)
         toggleRef.current?.focus()
       }
     }
+    // Klick/Tipp außerhalb des Chatfensters schließt es (der Chat-Button regelt sich selbst)
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node
+      if (panelRef.current?.contains(target) || toggleRef.current?.contains(target)) return
+      setOpen(false)
+    }
     window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
+    document.addEventListener("pointerdown", onPointerDown)
+    return () => {
+      window.removeEventListener("keydown", onKey)
+      document.removeEventListener("pointerdown", onPointerDown)
+    }
   }, [open])
 
   useEffect(() => {
@@ -72,6 +84,8 @@ export function Assistant() {
         {open && (
           <motion.div
             key="panel"
+            ref={panelRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="false"
             aria-labelledby={titleId}
@@ -80,7 +94,7 @@ export function Assistant() {
             exit={{ opacity: 0, y: 12, scale: 0.97, transition: { duration: 0.18 } }}
             transition={{ duration: 0.4, ease: easeOutExpo }}
             data-lenis-prevent
-            className="fixed right-2 bottom-[72px] left-2 z-[60] flex max-h-[min(640px,calc(100svh-var(--nav-offset)-84px))] origin-bottom-right flex-col overflow-hidden rounded-[28px] bg-white text-ink shadow-[0_30px_90px_-20px_rgb(6_28_51/0.55)] ring-1 ring-black/5 sm:left-auto sm:w-[400px] md:right-5 md:bottom-[96px]"
+            className="fixed right-2 bottom-[72px] left-2 z-[60] flex outline-none max-h-[min(560px,70svh)] md:max-h-[min(640px,calc(100svh-var(--nav-offset)-84px))] origin-bottom-right flex-col overflow-hidden rounded-[28px] bg-white text-ink shadow-[0_30px_90px_-20px_rgb(6_28_51/0.55)] ring-1 ring-black/5 sm:left-auto sm:w-[400px] md:right-5 md:bottom-[96px]"
           >
             <div className="tone-night flex items-center justify-between gap-3 px-5 py-4">
               <div className="flex items-center gap-3">
@@ -136,7 +150,6 @@ export function Assistant() {
                   Deine Frage
                 </label>
                 <input
-                  ref={inputRef}
                   id={`${titleId}-input`}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}

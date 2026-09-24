@@ -119,7 +119,9 @@ test("Fahrschul-Assistent: Vorschläge, Freitext, Rückfallantwort, Escape", asy
   await page.getByRole("button", { name: "Fahrschul-Assistent öffnen" }).click()
   const dialog = page.getByRole("dialog", { name: "Fahrschul-Assistent" })
   await expect(dialog).toBeVisible()
-  await expect(dialog.getByRole("textbox")).toBeFocused()
+  // Fokus liegt im Chatfenster, NICHT im Eingabefeld (keine Tastatur auf dem Handy)
+  await expect(dialog).toBeFocused()
+  await expect(dialog.getByRole("textbox")).not.toBeFocused()
 
   await dialog.getByRole("button", { name: "Wann ist Theorieunterricht?" }).click()
   await expect(dialog.getByText(/immer von 19:00 – 20:30 Uhr/)).toBeVisible()
@@ -161,4 +163,26 @@ test("Zähler starten bei 0 und zählen hoch", async ({ page }) => {
   await counter.scrollIntoViewIfNeeded()
   await page.waitForTimeout(2500)
   await expect(counter).toHaveText("4")
+})
+
+test("Assistent: Klick außerhalb schließt, Klick ins Fenster nicht", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto("/")
+  await page.getByRole("button", { name: "Fahrschul-Assistent öffnen" }).click()
+  const dialog = page.getByRole("dialog", { name: "Fahrschul-Assistent" })
+  await expect(dialog).toBeVisible()
+  // Klick in den Chat (Begrüßungstext) lässt ihn offen
+  await dialog.getByText(/Fahrschul-Assistent der Fahrschule Bubla/).click()
+  await expect(dialog).toBeVisible()
+  // Tipp ins Eingabefeld fokussiert erst dann das Feld
+  await dialog.getByRole("textbox").click()
+  await expect(dialog.getByRole("textbox")).toBeFocused()
+  // Klick außerhalb (oben auf die Seite) schließt
+  await page.mouse.click(20, 20)
+  await expect(dialog).toBeHidden()
+  // Button öffnet und schließt weiterhin
+  await page.getByRole("button", { name: "Fahrschul-Assistent öffnen" }).click()
+  await expect(dialog).toBeVisible()
+  await page.getByRole("button", { name: "Fahrschul-Assistent schließen" }).first().click()
+  await expect(dialog).toBeHidden()
 })
