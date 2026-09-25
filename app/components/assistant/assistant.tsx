@@ -95,7 +95,9 @@ export function Assistant() {
           >
             <div className="tone-night flex items-center justify-between gap-3 px-5 py-4">
               <div className="flex items-center gap-3">
-                <span className="bg-sun text-ink grid size-10 place-items-center rounded-full text-[15px] font-extrabold">B</span>
+                <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white">
+                  <img src="/images/b-mark.svg" alt="" width={64} height={64} className="size-8" />
+                </span>
                 <div>
                   <p id={titleId} className="text-[16px] leading-tight font-bold text-white">
                     Fahrschul-Assistent

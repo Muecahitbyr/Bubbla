@@ -76,7 +76,11 @@ SEO je Seite: Titel und Beschreibung (bisherige Werte übernommen und je Seite e
 
 ## Bildquellen
 
-- `public/images/logo.png` – Originallogo (freigestellt), `public/images/fahrschule/fahrlehrer-golf.webp` – Originalfoto der Fahrschule (alter Xara-Rahmen entfernt).
+**Echtes Bildmaterial der Fahrschule** (mehr gab es auf der alten Seite nicht – dort waren alle übrigen Bilder ebenfalls Stockfotos):
+
+- `public/images/logo.svg` – Originallogo als Vektor nachgebaut (Arial wie im Original, Gelb `#F8E322`, Blau `#0365E1`); wird auf der Website verwendet. `public/images/logo.png` – Originaldatei (für JSON-LD).
+- `public/images/b-mark.svg`, `public/favicon.svg`, `public/apple-touch-icon.png` – „B“ im Logo-Stil.
+- `public/images/fahrschule/bubla-golf.webp` – Originalfoto (Fahrschul-Golf mit Bubla-Beschriftung und Fahrlehrer), aus der alten Seite, auf 1920 px hochgerechnet. Startseiten-Hero, Team, `public/og-image.jpg` (Vorschaubild beim Teilen, mit Logo).
 - `public/images/stock/` – Fotos von [Pexels](https://www.pexels.com/license/) (kostenlos, auch kommerziell, keine Quellenangabe nötig), als WebP (max. 2400 px). Jederzeit durch eigene Fotos ersetzbar (gleicher Dateiname).
 
 | Datei | Quelle |
@@ -88,7 +92,6 @@ SEO je Seite: Titel und Beschreibung (bisherige Werte übernommen und je Seite e
 | `stock/fahrerin-lenkrad.webp` | [pexels.com/photo/6816982](https://www.pexels.com/photo/6816982/) |
 | `stock/fahrerperspektive.webp` | [pexels.com/photo/31627608](https://www.pexels.com/photo/31627608/) |
 | `stock/fahrstunde.webp` | [pexels.com/photo/9518031](https://www.pexels.com/photo/9518031/) |
-| `stock/golf-landstrasse.webp` | [pexels.com/photo/10843557](https://www.pexels.com/photo/10843557/) |
 | `stock/helm-motorrad.webp` | [pexels.com/photo/17506580](https://www.pexels.com/photo/17506580/) |
 | `stock/lernen-app.webp` | [pexels.com/photo/1462631](https://www.pexels.com/photo/1462631/) |
 | `stock/motorrad-bergstrasse.webp` | [pexels.com/photo/29244519](https://www.pexels.com/photo/29244519/) |
@@ -101,7 +104,18 @@ SEO je Seite: Titel und Beschreibung (bisherige Werte übernommen und je Seite e
 | `stock/theorie-vortrag.webp` | [pexels.com/photo/8761324](https://www.pexels.com/photo/8761324/) |
 | `stock/wohnwagen.webp` | [pexels.com/photo/17816414](https://www.pexels.com/photo/17816414/) |
 
-Empfehlung: echte Fotos von Theorieraum, Fahrzeugen und Team ergänzen.
+### Fotowunschliste (ersetzt die Stockfotos)
+
+Das Originalfoto ist nur 959 px breit und im Vollbild leicht unscharf. Mit eigenen Fotos (Querformat, mind. 2400 px, Handy reicht) wirkt die Seite sofort echt:
+
+| Motiv | ersetzt |
+| --- | --- |
+| Aktueller Fahrschulwagen mit Beschriftung (neu, hochauflösend) | `fahrschule/bubla-golf.webp` (Hero, Team) |
+| Christian Bubla und Horst Vetter einzeln (Porträts) | Initialen-Kreise auf Startseite und Team |
+| Theorieraum Hüttenstraße 9 (leer und mit Schülern) | `stock/theorie-raum.webp`, `stock/theorie-vortrag.webp` |
+| Fahrstunde aus dem Innenraum (Schüler am Steuer, Fahrlehrer daneben) | `stock/fahrerin-laechelt.webp`, `stock/fahrerin-lenkrad.webp`, `stock/fahrstunde.webp` |
+| Anhänger-Gespann, Motorräder, Roller der Fahrschule | Bilder der jeweiligen Klassen in `app/content/classes.ts` |
+| Büro / Eingang Neugablonzer Str. 29 | – (neu für die Kontaktseite) |
 
 ## Veröffentlichen
 

@@ -2,6 +2,7 @@ import { Phone } from "lucide-react"
 import { paths, site } from "~/content/site"
 import { AnimatedWords } from "./animated-headline"
 import { ButtonLink } from "./button"
+import { Logo } from "./logo"
 import { Reveal } from "./reveal"
 
 /** Abschluss jeder Seite: Bubla-gelbe Fläche mit Straßengrafik, großer Satz, zwei Aktionen */
@@ -21,6 +22,11 @@ export function CtaBand({
           <path d="M-50 400 C 300 360, 520 240, 700 180 S 1050 60, 1300 40" fill="none" stroke="#ffffff" strokeWidth="6" strokeDasharray="38 26" />
         </svg>
         <div className="wrap-narrow text-center">
+          <Reveal>
+            <span className="mb-10 inline-block -rotate-2 rounded-[22px] bg-white px-6 py-4 shadow-[0_18px_40px_-18px_rgb(6_28_51/0.45)] md:mb-12">
+              <Logo className="h-16 md:h-20" />
+            </span>
+          </Reveal>
           <h2 className="display-lg mx-auto max-w-[16ch] pb-[0.1em]">
             <AnimatedWords text={title} />
           </h2>

@@ -29,8 +29,8 @@ export function Footer() {
     <footer className="tone-night text-[14px] leading-[1.6]">
       <div className="wrap pt-16 pb-10">
         <div className="flex flex-wrap items-center justify-between gap-6">
-          <Link to={paths.home} aria-label="Startseite" className="rounded-2xl bg-white px-4 py-3">
-            <Logo className="h-11" />
+          <Link to={paths.home} aria-label="Startseite" className="rounded-[22px] bg-white px-6 py-4">
+            <Logo className="h-16 md:h-20" />
           </Link>
           <p className="text-sun text-[22px] font-extrabold tracking-[-0.02em]">{site.claim}</p>
         </div>

@@ -7,7 +7,7 @@ import { AnimatedWords } from "../ui/animated-headline"
 import { ButtonLink } from "../ui/button"
 
 /** Wird auch in root.tsx vorgeladen – beide Stellen müssen dasselbe Bild nennen */
-export const HERO_IMAGE = "/images/stock/golf-landstrasse.webp"
+export const HERO_IMAGE = "/images/fahrschule/bubla-golf.webp"
 
 /** Handy: Oberkante (unter der schwebenden Navigation) und Seitenverhältnis (Höhe/Breite) des Bild-Bands */
 const MOBILE_BAND_TOP = 72
@@ -129,9 +129,9 @@ export function HomeHero() {
         >
           <motion.img
             src={HERO_IMAGE}
-            alt="VW Golf fährt auf einer Landstraße"
+            alt="Fahrlehrer der Fahrschule Bubla am weißen Fahrschul-Golf mit Bubla-Beschriftung"
             style={{ scale: imgScale, y: imgShift }}
-            className="h-full w-full object-cover object-[55%_58%]"
+            className="h-full w-full object-cover object-[78%_60%] md:object-[55%_58%]"
             fetchPriority="high"
             decoding="async"
           />
