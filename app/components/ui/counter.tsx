@@ -1,5 +1,6 @@
-import { animate, motion, useInView, useMotionValue, useReducedMotion, useTransform } from "motion/react"
+import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "motion/react"
 import { useEffect, useRef } from "react"
+import { useRevealed } from "~/lib/use-revealed"
 
 /**
  * Zahl, die beim Hereinscrollen hochzählt. Startet IMMER bei 0 (auch bei reduzierter
@@ -7,7 +8,8 @@ import { useEffect, useRef } from "react"
  */
 export function Counter({ to, prefix = "", suffix = "", duration = 1.8 }: { to: number; prefix?: string; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, amount: 0.8 })
+  // Startet, sobald die Zahl sichtbar wird (etwas höher als bei Reveal, damit man das Hochzählen sieht)
+  const inView = useRevealed(ref, 0.15)
   const reduce = useReducedMotion()
   const value = useMotionValue(0)
   const rounded = useTransform(value, (v) => Math.round(v).toString())

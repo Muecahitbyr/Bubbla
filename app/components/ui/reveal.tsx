@@ -1,6 +1,7 @@
 import { motion, useReducedMotion, type Variants } from "motion/react"
-import type { ReactNode } from "react"
+import { useRef, type ReactNode } from "react"
 import { easeOutExpo } from "~/lib/motion"
+import { useRevealed } from "~/lib/use-revealed"
 
 /** Blendet Inhalte beim Hereinscrollen weich ein (Fade + Slide). */
 export function Reveal({
@@ -8,21 +9,21 @@ export function Reveal({
   className,
   delay = 0,
   y = 28,
-  amount = 0.2,
 }: {
   children: ReactNode
   className?: string
   delay?: number
   y?: number
-  amount?: number
 }) {
   const reduce = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const shown = useRevealed(ref)
   return (
     <motion.div
+      ref={ref}
       className={className}
       initial={reduce ? false : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount, margin: "0px 0px -6% 0px" }}
+      animate={shown || reduce ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.95, delay, ease: easeOutExpo }}
     >
       {children}
@@ -45,19 +46,20 @@ export function Stagger({
   children,
   className,
   stagger = 0.08,
-  amount = 0.15,
   as = "div",
 }: {
   children: ReactNode
   className?: string
   stagger?: number
-  amount?: number
   as?: "div" | "ul" | "ol"
 }) {
   const reduce = useReducedMotion()
+  const ref = useRef<HTMLElement>(null)
+  const shown = useRevealed(ref)
   const Comp = as === "ul" ? motion.ul : as === "ol" ? motion.ol : motion.div
   return (
-    <Comp className={className} variants={container} custom={stagger} initial={reduce ? false : "hidden"} whileInView="show" viewport={{ once: true, amount }}>
+    // Ref-Typ je nach Tag unterschiedlich – Laufzeit ist identisch
+    <Comp ref={ref as never} className={className} variants={container} custom={stagger} initial={reduce ? false : "hidden"} animate={shown || reduce ? "show" : "hidden"}>
       {children}
     </Comp>
   )
