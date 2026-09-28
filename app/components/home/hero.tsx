@@ -135,7 +135,7 @@ export function HomeHero() {
             fetchPriority="high"
             decoding="async"
           />
-          <motion.div aria-hidden className="absolute inset-0 hidden bg-gradient-to-t from-[#061c33] via-[#061c33]/40 to-transparent md:block" style={{ opacity: shade }} />
+          <motion.div aria-hidden data-stay-hidden className="absolute inset-0 hidden bg-gradient-to-t from-[#061c33] via-[#061c33]/40 to-transparent md:block" style={{ opacity: shade }} />
         </motion.div>
 
         {/* Headline – linksbündig, rechts daneben Einleitung & Aktionen */}
@@ -170,7 +170,7 @@ export function HomeHero() {
         </motion.div>
 
         {/* Aussage auf dem Vollbild (Tablet/Desktop) */}
-        <motion.div style={{ opacity: overlayOpacity, y: overlayY }} className="pointer-events-none absolute inset-x-0 bottom-0 hidden pb-16 text-white md:block md:pb-24">
+        <motion.div data-stay-hidden style={{ opacity: overlayOpacity, y: overlayY }} className="pointer-events-none absolute inset-x-0 bottom-0 hidden pb-16 text-white md:block md:pb-24">
           <div className="wrap flex items-end justify-between gap-10">
             <p className="display-lg max-w-[12ch]">
               Kaufbeuren <span className="text-sun">&amp; Neugablonz.</span>
@@ -183,6 +183,7 @@ export function HomeHero() {
 
         {/* Aussage unter dem Bild-Band (Handy) – Position passend zu MOBILE_BAND_TOP/RATIO */}
         <motion.div
+          data-stay-hidden
           style={{ opacity: overlayOpacity, y: overlayY, top: `calc(${MOBILE_BAND_TOP}px + ${MOBILE_BAND_RATIO * 100}vw + 28px)` }}
           className="pointer-events-none absolute inset-x-0 md:hidden"
         >

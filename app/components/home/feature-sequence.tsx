@@ -36,6 +36,7 @@ export function FeatureSequence({ chapters, label }: { chapters: Chapter[]; labe
                 src={c.image}
                 alt={i === active ? c.alt : ""}
                 aria-hidden={i !== active}
+                data-stay-hidden={i !== active || undefined}
                 loading={i === 0 ? "eager" : "lazy"}
                 decoding="async"
                 style={{ objectPosition: c.position }}
