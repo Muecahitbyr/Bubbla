@@ -150,12 +150,8 @@ export function HomeHero() {
                 <AnimatedWords text={`${site.name.replace("Fahrschule ", "")}.`} delay={0.25} />
               </span>
             </h1>
-            <motion.div
-              className="lg:col-span-4 lg:pb-3"
-              initial={reduce ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: easeOutExpo }}
-            >
+            {/* CSS-Einblenden – wartet nicht auf JavaScript */}
+            <div className="intro-fade lg:col-span-4 lg:pb-3" style={{ animationDelay: "0.3s" }}>
               <p className="lead hidden max-w-[26rem] sm:block">
                 Deine Fahrschule mit <strong>Spaß, Fairness, Erfahrung und Kompetenz</strong> – Theorie viermal pro Woche.
               </p>
@@ -165,7 +161,7 @@ export function HomeHero() {
                   {site.phone.display}
                 </ButtonLink>
               </div>
-            </motion.div>
+            </div>
           </div>
         </motion.div>
 
