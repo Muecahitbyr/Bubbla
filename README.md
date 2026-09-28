@@ -11,7 +11,7 @@ Neuauflage von [fahrschule-bubla.de](http://fahrschule-bubla.de) als modernes Re
 | Animationen | Motion (Hero-Zoom, Scroll-Sequenz, Parallax, Bild-Reveal, horizontale Galerie, Wort-für-Wort-Text, Zähler, Zeitleiste) |
 | Smooth Scrolling | Lenis (aus bei „Bewegung reduzieren“) |
 | Schrift | Plus Jakarta Sans, lokal über @fontsource (kein Google-Fonts-Aufruf) |
-| Icons | lucide-react |
+| Icons | lucide-react, einzeln eingebunden über `app/lib/icons.ts` (neues Icon dort ergänzen) |
 | Tests | Playwright (Chromium + WebKit/Safari) |
 
 Design: **Bubla-Gelb `#F8E322` als Hauptfarbe** (Hero, Seitenköpfe, Abschluss-Block, Buttons, Cremegelb für Zwischenflächen), Tiefblau `#061C33` und Bubla-Blau `#005BA4` für Text, Links und Kontrast. Buttons auf gelben Flächen werden automatisch tiefblau (CSS-Variablen `--btn-bg` usw. in `app/app.css`). Dazu schwebende Pill-Navigation, Klassen als Kfz-Kennzeichen, Fortschritt als Fahrbahnmarkierung.
