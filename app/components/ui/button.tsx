@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react"
+import { ArrowRight } from "~/lib/icons"
 import type { ReactNode } from "react"
 import { Link } from "react-router"
 import { cn } from "~/lib/cn"

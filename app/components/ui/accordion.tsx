@@ -1,5 +1,5 @@
 import { motion } from "motion/react"
-import { Plus } from "lucide-react"
+import { Plus } from "~/lib/icons"
 import { useId, useState } from "react"
 import { easeOutExpo } from "~/lib/motion"
 import { cn } from "~/lib/cn"

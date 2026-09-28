@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight } from "~/lib/icons"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
 import { classes } from "~/content/classes"

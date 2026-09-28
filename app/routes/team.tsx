@@ -1,4 +1,4 @@
-import { Award, Heart, Sparkles } from "lucide-react"
+import { Award, Heart, Sparkles } from "~/lib/icons"
 import type { MetaFunction } from "react-router"
 import { LocalNav } from "~/components/layout/local-nav"
 import { CtaBand } from "~/components/ui/cta-band"

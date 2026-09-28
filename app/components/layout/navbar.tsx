@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react"
-import { ChevronDown, Phone } from "lucide-react"
+import { ChevronDown, Phone } from "~/lib/icons"
 import { useEffect, useRef, useState } from "react"
 import { Link, NavLink, useLocation } from "react-router"
 import { categoryLabels, classes, type Category } from "~/content/classes"

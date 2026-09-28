@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useInView } from "motion/react"
-import { Check, Info } from "lucide-react"
+import { Check, Info } from "~/lib/icons"
 import { useEffect, useRef, useState } from "react"
 import type { Step } from "~/content/info"
 import { cn } from "~/lib/cn"

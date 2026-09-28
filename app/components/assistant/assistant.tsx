@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { ArrowUpRight, MessageCircle, X } from "lucide-react"
+import { ArrowUpRight, MessageCircle, X } from "~/lib/icons"
 import { useEffect, useId, useRef, useState } from "react"
 import { Link, useLocation } from "react-router"
 import { greeting, questionGroups, type AssistantAnswer, type AssistantLink, type Question } from "~/content/assistant"

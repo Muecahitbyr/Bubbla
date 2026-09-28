@@ -1,4 +1,4 @@
-import { MapPin, Navigation } from "lucide-react"
+import { MapPin, Navigation } from "~/lib/icons"
 import { useState } from "react"
 import { Link } from "react-router"
 import { paths, site } from "~/content/site"

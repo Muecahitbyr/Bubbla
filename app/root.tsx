@@ -4,12 +4,15 @@ import type { LinksFunction } from "react-router"
 import "./app.css"
 import { paths, site } from "./content/site"
 import { HERO_IMAGE } from "./components/home/hero"
+// Dieselbe Datei, die @fontsource in app.css einbindet – Vorladen spart das Warten auf die Schrift im Hero
+import fontUrl from "@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url"
 
 export const links: LinksFunction = () => [
   { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
   { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
   // Muss exakt das Bild sein, das der Startseiten-Hero verwendet
   { rel: "preload", href: HERO_IMAGE, as: "image", type: "image/webp" },
+  { rel: "preload", href: fontUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
 ]
 
 /**

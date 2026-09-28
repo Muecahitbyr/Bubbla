@@ -1,4 +1,4 @@
-import { Phone } from "lucide-react"
+import { Phone } from "~/lib/icons"
 import { paths, site } from "~/content/site"
 import { AnimatedWords } from "./animated-headline"
 import { ButtonLink } from "./button"

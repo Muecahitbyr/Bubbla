@@ -1,4 +1,4 @@
-import { ArrowRight, Check, GraduationCap, Route as RouteIcon, ScrollText as ScrollIcon } from "lucide-react"
+import { ArrowRight, Check, GraduationCap, Route as RouteIcon, ScrollText as ScrollIcon } from "~/lib/icons"
 import type { MetaFunction } from "react-router"
 import { useMatches } from "react-router"
 import { LocalNav } from "~/components/layout/local-nav"

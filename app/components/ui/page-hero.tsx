@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "motion/react"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight } from "~/lib/icons"
 import type { ReactNode } from "react"
 import { Link } from "react-router"
 import { cn } from "~/lib/cn"

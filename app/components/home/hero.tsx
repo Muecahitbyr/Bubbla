@@ -1,5 +1,5 @@
 import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react"
-import { Phone } from "lucide-react"
+import { Phone } from "~/lib/icons"
 import { useCallback, useEffect, useRef } from "react"
 import { paths, site } from "~/content/site"
 import { clamp01, easeOutExpo } from "~/lib/motion"
@@ -96,10 +96,10 @@ export function HomeHero() {
     // Erst einblenden, wenn die Schrift geladen ist (sonst ändert sich die Höhe der Headline noch)
     let cancelled = false
     const fontsReady = document.fonts?.ready ?? Promise.resolve()
-    Promise.race([fontsReady, new Promise((r) => setTimeout(r, 800))]).then(() => {
+    Promise.race([fontsReady, new Promise((r) => setTimeout(r, 300))]).then(() => {
       if (cancelled) return
       measure()
-      animate(cardOpacity, 1, { duration: reduce ? 0 : 0.9, ease: easeOutExpo })
+      animate(cardOpacity, 1, { duration: reduce ? 0 : 0.5, ease: easeOutExpo })
     })
 
     return () => {
@@ -154,7 +154,7 @@ export function HomeHero() {
               className="lg:col-span-4 lg:pb-3"
               initial={reduce ? false : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.55, ease: easeOutExpo }}
+              transition={{ duration: 0.8, delay: 0.3, ease: easeOutExpo }}
             >
               <p className="lead hidden max-w-[26rem] sm:block">
                 Deine Fahrschule mit <strong>Spaß, Fairness, Erfahrung und Kompetenz</strong> – Theorie viermal pro Woche.

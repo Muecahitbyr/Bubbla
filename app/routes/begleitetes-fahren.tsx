@@ -1,4 +1,4 @@
-import { Check } from "lucide-react"
+import { Check } from "~/lib/icons"
 import type { MetaFunction } from "react-router"
 import { LocalNav } from "~/components/layout/local-nav"
 import { Accordion } from "~/components/ui/accordion"

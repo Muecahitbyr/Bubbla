@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight } from "~/lib/icons"
 import { useState } from "react"
 import { Link } from "react-router"
 import { categoryLabels, classes, mainFee, priceLabel, type Category } from "~/content/classes"

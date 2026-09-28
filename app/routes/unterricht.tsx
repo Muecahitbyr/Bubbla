@@ -1,4 +1,4 @@
-import { CalendarDays, ExternalLink, MapPin } from "lucide-react"
+import { CalendarDays, ExternalLink, MapPin } from "~/lib/icons"
 import type { MetaFunction } from "react-router"
 import { LocalNav } from "~/components/layout/local-nav"
 import { ButtonLink } from "~/components/ui/button"

@@ -1,4 +1,4 @@
-import { FlaskConical } from "lucide-react"
+import { FlaskConical } from "~/lib/icons"
 import { site } from "~/content/site"
 import { cn } from "~/lib/cn"
 

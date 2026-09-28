@@ -1,5 +1,5 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
-import { ArrowRight, GraduationCap, Headphones, Mail, Phone, Sparkles } from "lucide-react"
+import { ArrowRight, GraduationCap, Headphones, Mail, Phone, Sparkles } from "~/lib/icons"
 import { useRef } from "react"
 import type { MetaFunction } from "react-router"
 import { Link } from "react-router"

@@ -1,4 +1,4 @@
-import { ArrowUp } from "lucide-react"
+import { ArrowUp } from "~/lib/icons"
 import { Link } from "react-router"
 import { autoClasses, bikeClasses } from "~/content/classes"
 import { paths, site } from "~/content/site"

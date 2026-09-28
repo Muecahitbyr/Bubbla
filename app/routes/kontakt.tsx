@@ -1,4 +1,4 @@
-import { Clock, Mail, Phone, Smartphone } from "lucide-react"
+import { Clock, Mail, Phone, Smartphone } from "~/lib/icons"
 import type { MetaFunction } from "react-router"
 import { LocalNav } from "~/components/layout/local-nav"
 import { ButtonLink } from "~/components/ui/button"

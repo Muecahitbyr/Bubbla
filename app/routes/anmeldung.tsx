@@ -1,4 +1,4 @@
-import { CheckCircle2, Download, Mail, Send } from "lucide-react"
+import { CheckCircle2, Download, Mail, Send } from "~/lib/icons"
 import { useState, type FormEvent } from "react"
 import type { MetaFunction } from "react-router"
 import { Link } from "react-router"
