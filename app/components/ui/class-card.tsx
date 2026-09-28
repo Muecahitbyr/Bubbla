@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "~/lib/icons"
 import { Link } from "react-router"
 import { cn } from "~/lib/cn"
+import { imageSizes, responsiveImage } from "~/lib/images"
 import { Plate } from "./plate"
 
 export type ClassCardItem = {
@@ -19,7 +20,7 @@ export function ClassCard({ item, className }: { item: ClassCardItem; className?
   return (
     <Link to={item.path} prefetch="intent" className={cn("group relative isolate block aspect-[3/4] overflow-hidden rounded-[26px] bg-night text-white", className)}>
       <img
-        src={item.image}
+        {...responsiveImage(item.image, imageSizes.card)}
         alt={item.imageAlt}
         loading="lazy"
         decoding="async"

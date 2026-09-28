@@ -1,41 +1,33 @@
 import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "motion/react"
 import { useEffect, useRef } from "react"
-import { useRevealed } from "~/lib/use-revealed"
+import { useRevealPhase } from "~/lib/use-revealed"
 
 /**
- * Zahl, die beim Hereinscrollen hochzählt. Startet IMMER bei 0 (auch bei reduzierter
- * Bewegung) – sonst weicht das vorgerenderte HTML vom Browser ab (Hydration-Fehler).
+ * Zahl, die beim Hereinscrollen von 0 auf den Zielwert hochzählt.
+ * Vorgerendert wird der ZIELWERT – ohne JavaScript (oder wenn es nicht startet) steht also immer die
+ * richtige Zahl da, und Vorrendern und Hydrieren stimmen überein. Erst wenn der Zähler beim Start
+ * unterhalb des Bildschirms liegt, wird er auf 0 gesetzt und zählt beim Hereinscrollen hoch.
+ * Nur eine Textfassung der Zahl: Screenreader und Kopieren liefern den echten Wert.
  */
 export function Counter({ to, prefix = "", suffix = "", duration = 1.8 }: { to: number; prefix?: string; suffix?: string; duration?: number }) {
   const ref = useRef<HTMLSpanElement>(null)
-  // Startet, sobald die Zahl sichtbar wird (etwas höher als bei Reveal, damit man das Hochzählen sieht)
-  const inView = useRevealed(ref, 0.15)
   const reduce = useReducedMotion()
-  const value = useMotionValue(0)
+  const phase = useRevealPhase(ref, { disabled: !!reduce })
+  const value = useMotionValue(to)
   const rounded = useTransform(value, (v) => Math.round(v).toString())
 
   useEffect(() => {
-    if (reduce) {
-      value.set(to)
-      return
-    }
-    if (!inView) return
+    if (phase === "hidden") value.set(0)
+    if (phase !== "shown") return
     const controls = animate(value, to, { duration, ease: [0.16, 1, 0.3, 1] })
     return () => controls.stop()
-  }, [inView, reduce, to, duration, value])
+  }, [phase, to, duration, value])
 
   return (
-    <span ref={ref}>
-      <span className="sr-only">
-        {prefix}
-        {to}
-        {suffix}
-      </span>
-      <span aria-hidden="true" className="tabular-nums">
-        {prefix}
-        <motion.span>{rounded}</motion.span>
-        {suffix}
-      </span>
+    <span ref={ref} data-counter className="tabular-nums">
+      {prefix}
+      <motion.span>{rounded}</motion.span>
+      {suffix}
     </span>
   )
 }

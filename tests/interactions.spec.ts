@@ -162,14 +162,6 @@ test("Hero-Karte: beim Laden = nach Hoch-Scrollen, Headline sichtbar", async ({ 
   expect(clip).toBe("text")
 })
 
-test("Zähler starten bei 0 und zählen hoch", async ({ page }) => {
-  await page.goto("/", { waitUntil: "networkidle" })
-  const counter = page.locator("[aria-hidden=true].tabular-nums").first()
-  await counter.scrollIntoViewIfNeeded()
-  await page.waitForTimeout(2500)
-  await expect(counter).toHaveText("4")
-})
-
 test("Assistent: Klick außerhalb schließt, Klick ins Fenster nicht", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/")

@@ -20,7 +20,9 @@ import { classB, mainFee, priceLabel, specialDriveTotal } from "~/content/classe
 import { about, pillars, steps, teamText } from "~/content/info"
 import { paths, site } from "~/content/site"
 import { team, teamPhoto } from "~/content/team"
+import { imageSizes, responsiveImage } from "~/lib/images"
 import { legacySeo, seo } from "~/lib/seo"
+import { useHydrated } from "~/lib/use-hydrated"
 
 export const meta: MetaFunction = () => seo({ ...legacySeo, path: paths.home })
 
@@ -236,7 +238,7 @@ export default function Home() {
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-7">
             <figure className="overflow-hidden rounded-[26px] bg-white/5">
-              <img src={teamPhoto.src} alt={teamPhoto.alt} width={teamPhoto.width} height={teamPhoto.height} loading="lazy" decoding="async" className="h-auto w-full" />
+              <img {...responsiveImage(teamPhoto.src, imageSizes.wide)} alt={teamPhoto.alt} loading="lazy" decoding="async" className="h-auto w-full" />
             </figure>
           </Reveal>
         </div>
@@ -288,6 +290,8 @@ export default function Home() {
 function PromiseParallax() {
   const ref = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
+  // Bis JavaScript läuft: Text sichtbar (die Deckkraft hängt sonst an der Scrollposition)
+  const hydrated = useHydrated()
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
   const imgY = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-14%", "14%"])
   const textY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [150, -150])
@@ -301,7 +305,7 @@ function PromiseParallax() {
   return (
     <section ref={ref} className="tone-night relative h-[125svh] overflow-hidden" aria-label="Unser Versprechen">
       <motion.img
-        src="/images/stock/allgaeu-wiese.webp"
+        {...responsiveImage("/images/stock/allgaeu-wiese.webp", imageSizes.full)}
         alt="Blumenwiese mit Almhütte vor den Allgäuer Bergen"
         loading="lazy"
         decoding="async"
@@ -309,7 +313,7 @@ function PromiseParallax() {
         className="absolute inset-0 h-full w-full object-cover object-[center_35%]"
       />
       <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#061c33]/55 via-[#061c33]/35 to-[#061c33]/70" />
-      <motion.div style={{ y: textY, opacity: textOpacity }} className="wrap relative flex h-full flex-col items-start justify-center">
+      <motion.div style={hydrated ? { y: textY, opacity: textOpacity } : undefined} className="wrap relative flex h-full flex-col items-start justify-center">
         <p className="kicker mb-6">Unser Versprechen</p>
         <p className="display-xl max-w-[12ch] pb-3 text-white">
           Keine Fahrstunde <span className="text-sun">zu viel.</span>

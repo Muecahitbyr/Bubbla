@@ -63,12 +63,12 @@ export function PageHero({
           <AnimatedWords text={title} delay={0.1} />
         </h1>
         {lead && (
-          <div {...fade(0.35)} className="intro-fade lead mt-6 max-w-[40rem]">
+          <div {...fade(0.2)} className="intro-fade lead mt-6 max-w-[40rem]">
             {lead}
           </div>
         )}
         {children && (
-          <div {...fade(0.5)} className="intro-fade mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div {...fade(0.3)} className="intro-fade mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
             {children}
           </div>
         )}

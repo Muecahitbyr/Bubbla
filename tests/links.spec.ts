@@ -13,9 +13,14 @@ test("Alle internen Links, Sprungmarken, Bilder und PDFs funktionieren", async (
     await page.goto(path, { waitUntil: "networkidle" })
     const found = await page.evaluate(() => ({
       links: [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href")!),
-      assets: [...document.querySelectorAll("img[src], link[rel=icon], link[rel=apple-touch-icon], link[rel=preload]")].map(
-        (el) => el.getAttribute("src") ?? el.getAttribute("href")!,
-      ),
+      // src/href sowie jede Stufe aus srcset/imagesrcset (responsive Bilder) – alle Varianten müssen existieren
+      assets: [...document.querySelectorAll("img, link[rel=icon], link[rel=apple-touch-icon], link[rel=preload]")].flatMap((el) => [
+        ...[el.getAttribute("src"), el.getAttribute("href")].filter((v): v is string => !!v),
+        ...(el.getAttribute("srcset") ?? el.getAttribute("imagesrcset") ?? "")
+          .split(",")
+          .map((c) => c.trim().split(/\s+/)[0])
+          .filter(Boolean),
+      ]),
     }))
     for (const href of [...found.links, ...found.assets]) {
       if (href.startsWith("http")) external.add(href)

@@ -1,28 +1,16 @@
-import { useEffect, type ReactNode } from "react"
+import type { ReactNode } from "react"
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 import type { LinksFunction } from "react-router"
 import "./app.css"
 import { paths, site } from "./content/site"
-import { HERO_IMAGE } from "./components/home/hero"
 // Dieselbe Datei, die @fontsource in app.css einbindet – Vorladen spart das Warten auf die Schrift im Hero
 import fontUrl from "@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url"
 
 export const links: LinksFunction = () => [
   { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
   { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-  // Muss exakt das Bild sein, das der Startseiten-Hero verwendet
-  { rel: "preload", href: HERO_IMAGE, as: "image", type: "image/webp" },
   { rel: "preload", href: fontUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
 ]
-
-/**
- * Inhalte mit Einblend-Animation starten unsichtbar (opacity:0 im vorgerenderten HTML).
- * Läuft JavaScript nicht (abgeschaltet, Skript lädt nicht, Datei direkt geöffnet), sollen sie trotzdem sichtbar sein:
- * Die Klasse „anim“ gibt es nur mit JavaScript, und sie wird wieder entfernt, wenn die Seite nach 4 s noch nicht gestartet ist.
- * Elemente mit data-stay-hidden (z. B. Scroll-Überblendungen im Hero) bleiben auch dann verborgen.
- */
-const animFallbackScript = `(function(d){d.classList.add("anim");setTimeout(function(){if(!d.hasAttribute("data-ready"))d.classList.remove("anim")},4000)})(document.documentElement)`
-const animFallbackCss = `html:not(.anim) [style*="opacity:0"]:not([data-stay-hidden]){opacity:1!important;transform:none!important}`
 
 const drivingSchool = {
   "@context": "https://schema.org",
@@ -70,8 +58,7 @@ const drivingSchool = {
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
-    // suppressHydrationWarning: das Notfall-Skript setzt vor dem Hydrieren eine Klasse auf <html>
-    <html lang="de" suppressHydrationWarning>
+    <html lang="de">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -79,8 +66,6 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="format-detection" content="telephone=no" />
         <Meta />
         <Links />
-        <script dangerouslySetInnerHTML={{ __html: animFallbackScript }} />
-        <style dangerouslySetInnerHTML={{ __html: animFallbackCss }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(drivingSchool) }} />
       </head>
       <body>
@@ -93,10 +78,6 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 
 export default function App() {
-  // Signal an das Notfall-Skript im <head>: JavaScript läuft, Einblend-Animationen übernehmen
-  useEffect(() => {
-    document.documentElement.setAttribute("data-ready", "")
-  }, [])
   return <Outlet />
 }
 

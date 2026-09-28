@@ -17,7 +17,7 @@ for (const path of allPages) {
   })
 
   test(`Bewegung reduzieren ${path}`, async ({ browser }) => {
-    for (const vp of [widths[0], widths[6]]) {
+    for (const vp of widths.filter((w) => w.width === 320 || w.width === 1440)) {
       const ctx = await browser.newContext({ viewport: vp, reducedMotion: "reduce" })
       const page = await ctx.newPage()
       const errors = watchErrors(page)

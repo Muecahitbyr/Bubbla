@@ -24,8 +24,20 @@ npm run dev          # Entwicklungsserver auf http://localhost:5173
 npm run build        # Produktions-Build nach build/client (HTML je Seite + sitemap.xml + 404.html)
 npm run preview      # Build lokal testen auf http://localhost:4180
 npm run typecheck    # TypeScript prüfen
-npm test             # Playwright-Tests (vorher npm run build; einmalig: npx playwright install chromium webkit)
+npm test             # Playwright-Tests (vorher npm run build; einmalig: npx playwright install chromium webkit firefox)
+node scripts/responsive-images.mjs   # nach neuen/ersetzten Fotos: Bildstufen + Maße erzeugen (braucht cwebp)
 ```
+
+## Animationen – Grundregel
+
+**Kein Inhalt hängt an JavaScript.** Alles wird sichtbar vorgerendert; Zähler zeigen im HTML ihren Endwert.
+
+- Überschriften, Einleitung und Buttons oben blenden per CSS ein (`.intro-word`, `.intro-fade` in `app/app.css`) – sie starten mit dem HTML, nicht erst mit JavaScript.
+- `Reveal`, `Stagger`, `Counter` (Einblenden beim Scrollen) nutzen `useRevealPhase` (`app/lib/use-revealed.ts`): Erst wenn JavaScript läuft, werden Elemente, die **komplett unterhalb** des Bildschirms liegen, unsichtbar geschaltet und beim Hereinkommen animiert. Ausgelöst wird bei der ersten Berührung mit dem Bildschirm (IntersectionObserver ohne Anteil-Schwelle) oder wenn ein Sprung sie überholt hat (Scroll-Prüfung).
+- Scroll-gekoppelte Deckkraft (`ScrollText`, Versprechen-Block, Schritt-Fokus) greift erst nach dem Hydrieren (`useHydrated`).
+- Hero der Startseite: feste Bildkarte im normalen Fluss (sichtbar ohne JavaScript), darüber die bewegliche Karte für den Zoom, die ihre Maße von der festen Karte abnimmt.
+
+`tests/robustness.spec.ts` sichert das ab (ohne JavaScript, Sprung ans Seitenende, Reload mitten auf der Seite, Seitenwechsel, Zähler).
 
 ## Inhalte pflegen
 
@@ -104,6 +116,10 @@ SEO je Seite: Titel und Beschreibung (bisherige Werte übernommen und je Seite e
 | `stock/theorie-vortrag.webp` | [pexels.com/photo/8761324](https://www.pexels.com/photo/8761324/) |
 | `stock/wohnwagen.webp` | [pexels.com/photo/17816414](https://www.pexels.com/photo/17816414/) |
 
+### Bildgrößen (responsive)
+
+Jedes Foto gibt es in bis zu vier Stufen (640 / 1080 / 1600 px und Original). `responsiveImage()` in `app/lib/images.ts` erzeugt daraus `srcset`, `sizes`, `width` und `height`; der Browser lädt nur die passende Stufe. Nach dem Hinzufügen oder Ersetzen eines Fotos einmal `node scripts/responsive-images.mjs` ausführen (erzeugt die Stufen und `app/content/image-manifest.json`).
+
 ### Fotowunschliste (ersetzt die Stockfotos)
 
 Das Originalfoto ist nur 959 px breit und im Vollbild leicht unscharf. Mit eigenen Fotos (Querformat, mind. 2400 px, Handy reicht) wirkt die Seite sofort echt:
@@ -126,10 +142,13 @@ Das Originalfoto ist nur 959 px breit und im Vollbild leicht unscharf. Mit eigen
 
 Netlify/Vercel/Cloudflare Pages: Build-Befehl `npm run build`, Ausgabeordner `build/client`.
 
+Hinweis Entwicklung: `npm run dev` schickt `Cache-Control: no-store` (Plugin in `vite.config.ts`). Safari hat sonst nach Dev-Server-Neustarts alte Module aus dem Cache mit neuen gemischt – JavaScript startete dann nicht.
+
 ## Tests
 
-`npm test` prüft in Chromium und WebKit:
-- alle Seiten auf 320, 375, 390, 402×874, 768, 1024, 1440 und 1920 px: keine Überbreite, kein abgeschnittener Text (gemessen an den gezeichneten Textzeilen), keine JS-/Hydration-Fehler – auch mit „Bewegung reduzieren“
-- interne/externe Links, Sprungmarken, Bilder, PDF, Sitemap, robots.txt, 404, SEO-Tags
+`npm test` prüft in Chromium, WebKit (Safari) und Firefox, die Robustheits-Tests zusätzlich mit iPhone- und Android-Profil:
+- Inhalte ohne JavaScript sichtbar, Zähler mit echten Werten, nichts bleibt nach Sprung/Reload/Seitenwechsel unsichtbar, Hero-Foto nicht lazy, Handy lädt keine 2400-px-Originale
+- alle Seiten auf 320, 360, 375, 390, 430, 844×390 (Handy quer), 768, 834, 1024, 1280, 1440 und 1920 px: keine Überbreite, kein abgeschnittener Text (gemessen an den gezeichneten Textzeilen), keine JS-/Hydration-Fehler – auch mit „Bewegung reduzieren“
+- interne/externe Links, Sprungmarken, Bilder inkl. aller srcset-Stufen, PDF, Sitemap, robots.txt, 404, SEO-Tags
 - Menüs, Klassen-Flyout, Filter, FAQ, Formular, Karte, Assistent, Sprungmarken-Versatz, Hero-Karte, Zähler
 - Vollständigkeit des Assistenten (jede Frage mit Antwort und gültigen Links, jede Klasse vertreten)

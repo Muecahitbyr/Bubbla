@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useRef, type ReactNode } from "react"
 import { cn } from "~/lib/cn"
+import { imageSizes, responsiveImage } from "~/lib/images"
 
 /**
  * Bild, das beim Hereinscrollen von einer abgerundeten Karte zur vollen Breite aufzieht.
@@ -44,11 +45,12 @@ export function ZoomMedia({
     <div ref={ref} className={cn("relative", className)}>
       <motion.div style={{ clipPath }} className={cn("relative overflow-hidden", height)}>
         <motion.img
-          src={src}
+          {...responsiveImage(src, imageSizes.full)}
           alt={alt}
           style={{ scale: imgScale, objectPosition: position }}
           className="absolute inset-0 h-full w-full object-cover"
           loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : undefined}
           decoding="async"
         />
         {children}

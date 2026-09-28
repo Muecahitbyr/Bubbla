@@ -1,11 +1,14 @@
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react"
 import { Fragment, useRef } from "react"
 import { cn } from "~/lib/cn"
+import { useHydrated } from "~/lib/use-hydrated"
 
 /** Absatz, dessen Wörter beim Scrollen nacheinander „aufleuchten“. `highlight` hebt Wörter gelb hervor. */
 export function ScrollText({ text, className, highlight = [] }: { text: string; className?: string; highlight?: string[] }) {
   const ref = useRef<HTMLParagraphElement>(null)
   const reduce = useReducedMotion()
+  // Bis JavaScript läuft: alle Wörter voll lesbar (nicht im blassen Startzustand)
+  const hydrated = useHydrated()
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.5"] })
   const words = text.split(" ")
   const marked = (w: string) => highlight.includes(w.replace(/[.,!?]/g, ""))
@@ -14,7 +17,7 @@ export function ScrollText({ text, className, highlight = [] }: { text: string; 
     <p ref={ref} className={cn("tracking-tight", className)}>
       {words.map((word, i) => (
         <Fragment key={i}>
-          {reduce ? (
+          {reduce || !hydrated ? (
             <span className={marked(word) ? "highlight" : undefined}>{word}</span>
           ) : (
             <Word progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]} marked={marked(word)}>

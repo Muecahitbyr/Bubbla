@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react"
 import { useRef, useState, type ReactNode } from "react"
+import { imageSizes, responsiveImage } from "~/lib/images"
 import { easeOutExpo } from "~/lib/motion"
 
 export type Chapter = { kicker: string; title: string; text: ReactNode; image: string; alt: string; position?: string }
@@ -33,10 +34,9 @@ export function FeatureSequence({ chapters, label }: { chapters: Chapter[]; labe
             {chapters.map((c, i) => (
               <motion.img
                 key={c.image}
-                src={c.image}
+                {...responsiveImage(c.image, imageSizes.wide)}
                 alt={i === active ? c.alt : ""}
                 aria-hidden={i !== active}
-                data-stay-hidden={i !== active || undefined}
                 loading="lazy"
                 decoding="async"
                 style={{ objectPosition: c.position }}

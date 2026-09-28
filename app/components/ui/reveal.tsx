@@ -1,9 +1,13 @@
 import { motion, useReducedMotion, type Variants } from "motion/react"
 import { useRef, type ReactNode } from "react"
 import { easeOutExpo } from "~/lib/motion"
-import { useRevealed } from "~/lib/use-revealed"
+import { useRevealPhase } from "~/lib/use-revealed"
 
-/** Blendet Inhalte beim Hereinscrollen weich ein (Fade + Slide). */
+/**
+ * Blendet Inhalte beim Hereinscrollen weich ein (Fade + Slide).
+ * Vorgerendert sichtbar (initial={false}) – nur Elemente unterhalb des Bildschirms werden nach dem
+ * Start von JavaScript kurz unsichtbar geschaltet (siehe useRevealPhase).
+ */
 export function Reveal({
   children,
   className,
@@ -17,14 +21,17 @@ export function Reveal({
 }) {
   const reduce = useReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
-  const shown = useRevealed(ref)
+  const phase = useRevealPhase(ref, { disabled: !!reduce })
   return (
     <motion.div
       ref={ref}
       className={className}
-      initial={reduce ? false : { opacity: 0, y }}
-      animate={shown || reduce ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.95, delay, ease: easeOutExpo }}
+      initial={false}
+      animate={
+        phase === "hidden"
+          ? { opacity: 0, y, transition: { duration: 0 } }
+          : { opacity: 1, y: 0, transition: phase === "shown" ? { duration: 0.95, delay, ease: easeOutExpo } : { duration: 0 } }
+      }
     >
       {children}
     </motion.div>
@@ -37,11 +44,11 @@ const container: Variants = {
 }
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 26 },
+  hidden: { opacity: 0, y: 26, transition: { duration: 0 } },
   show: { opacity: 1, y: 0, transition: { duration: 0.85, ease: easeOutExpo } },
 }
 
-/** Container, dessen <StaggerItem>-Kinder nacheinander erscheinen. */
+/** Container, dessen <StaggerItem>-Kinder nacheinander erscheinen (vorgerendert sichtbar, wie Reveal). */
 export function Stagger({
   children,
   className,
@@ -55,11 +62,11 @@ export function Stagger({
 }) {
   const reduce = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
-  const shown = useRevealed(ref)
+  const phase = useRevealPhase(ref, { disabled: !!reduce })
   const Comp = as === "ul" ? motion.ul : as === "ol" ? motion.ol : motion.div
   return (
     // Ref-Typ je nach Tag unterschiedlich – Laufzeit ist identisch
-    <Comp ref={ref as never} className={className} variants={container} custom={stagger} initial={reduce ? false : "hidden"} animate={shown || reduce ? "show" : "hidden"}>
+    <Comp ref={ref as never} className={className} variants={container} custom={stagger} initial={false} animate={phase === "hidden" ? "hidden" : "show"}>
       {children}
     </Comp>
   )

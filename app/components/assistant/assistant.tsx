@@ -17,6 +17,12 @@ export function Assistant() {
   const [messages, setMessages] = useState<Message[]>([{ id: 0, from: "bot", answer: greeting }])
   const [typing, setTyping] = useState(false)
   const nextId = useRef(1)
+  // Offene „tippt …“-Timer – beim Verlassen aufräumen
+  const timers = useRef(new Set<number>())
+  useEffect(() => {
+    const pending = timers.current
+    return () => pending.forEach((t) => window.clearTimeout(t))
+  }, [])
   const listRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
@@ -66,13 +72,15 @@ export function Assistant() {
   const reply = (question: string, answer: AssistantAnswer) => {
     setMessages((m) => [...m, { id: nextId.current++, from: "user", text: question }])
     setTyping(true)
-    window.setTimeout(
+    const t = window.setTimeout(
       () => {
+        timers.current.delete(t)
         setTyping(false)
         setMessages((m) => [...m, { id: nextId.current++, from: "bot", answer }])
       },
       reduce ? 0 : 450,
     )
+    timers.current.add(t)
   }
 
   return (

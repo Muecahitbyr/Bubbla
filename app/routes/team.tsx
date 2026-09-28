@@ -9,6 +9,7 @@ import { Heading, Section } from "~/components/ui/section"
 import { about, teamText } from "~/content/info"
 import { paths } from "~/content/site"
 import { team, teamPhoto } from "~/content/team"
+import { imageSizes, responsiveImage } from "~/lib/images"
 import { legacySeo, seo } from "~/lib/seo"
 
 export const meta: MetaFunction = () =>
@@ -34,7 +35,7 @@ export default function Team() {
         <div className="wrap grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-7">
             <figure>
-              <img src={teamPhoto.src} alt={teamPhoto.alt} width={teamPhoto.width} height={teamPhoto.height} className="h-auto w-full rounded-[26px]" loading="eager" decoding="async" />
+              <img {...responsiveImage(teamPhoto.src, imageSizes.wide)} alt={teamPhoto.alt} className="h-auto w-full rounded-[26px]" loading="eager" fetchPriority="high" decoding="async" />
               <figcaption className="text-muted mt-3 text-[13px]">Unterwegs mit dem Fahrschul-Golf – „mit Spaß zum Erfolg“ steht sogar auf der Motorhaube.</figcaption>
             </figure>
           </Reveal>

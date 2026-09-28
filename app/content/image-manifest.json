@@ -1,0 +1,166 @@
+{
+  "/images/fahrschule/bubla-golf.webp": {
+    "width": 1920,
+    "height": 1149,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/allgaeu-wiese.webp": {
+    "width": 1600,
+    "height": 2400,
+    "variants": [
+      640,
+      1080
+    ]
+  },
+  "/images/stock/anhaenger.webp": {
+    "width": 2400,
+    "height": 1601,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/autobahn.webp": {
+    "width": 2400,
+    "height": 1522,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/fahrerin-laechelt.webp": {
+    "width": 2400,
+    "height": 1600,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/fahrerin-lenkrad.webp": {
+    "width": 2400,
+    "height": 1600,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/fahrerperspektive.webp": {
+    "width": 1347,
+    "height": 2400,
+    "variants": [
+      640,
+      1080
+    ]
+  },
+  "/images/stock/fahrstunde.webp": {
+    "width": 1600,
+    "height": 2400,
+    "variants": [
+      640,
+      1080
+    ]
+  },
+  "/images/stock/helm-motorrad.webp": {
+    "width": 1600,
+    "height": 2400,
+    "variants": [
+      640,
+      1080
+    ]
+  },
+  "/images/stock/lernen-app.webp": {
+    "width": 2400,
+    "height": 1600,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/motorrad-bergstrasse.webp": {
+    "width": 2400,
+    "height": 1600,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/motorrad-helm.webp": {
+    "width": 1516,
+    "height": 2400,
+    "variants": [
+      640,
+      1080
+    ]
+  },
+  "/images/stock/motorrad-kurve.webp": {
+    "width": 1600,
+    "height": 2400,
+    "variants": [
+      640,
+      1080
+    ]
+  },
+  "/images/stock/nachtfahrt.webp": {
+    "width": 2400,
+    "height": 1600,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/roller.webp": {
+    "width": 2400,
+    "height": 1600,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/serpentinen-luftbild.webp": {
+    "width": 1597,
+    "height": 2400,
+    "variants": [
+      640,
+      1080
+    ]
+  },
+  "/images/stock/theorie-raum.webp": {
+    "width": 2400,
+    "height": 1602,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/theorie-vortrag.webp": {
+    "width": 2400,
+    "height": 1602,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  },
+  "/images/stock/wohnwagen.webp": {
+    "width": 2400,
+    "height": 1800,
+    "variants": [
+      640,
+      1080,
+      1600
+    ]
+  }
+}

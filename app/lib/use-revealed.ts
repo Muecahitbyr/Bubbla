@@ -1,53 +1,82 @@
 import { useEffect, useState, type RefObject } from "react"
 
 /**
- * Wird true, sobald die Oberkante des Elements den unteren Bildschirmrand erreicht hat – und bleibt es.
- * Bewusst ohne Sichtbarkeits-Anteil (IntersectionObserver „amount“): Große Blöcke in niedrigen Fenstern
- * oder beim schnellen Scrollen bzw. Springen über Anker würden sonst nie ausgelöst.
- * Alle Elemente teilen sich einen Scroll-Listener, der pro Frame höchstens einmal prüft.
+ * Zustand eines Elements, das beim Hereinscrollen eingeblendet wird:
+ * - "static": sichtbar, keine Animation. So wird vorgerendert – Inhalte sind ohne JavaScript
+ *   (oder wenn es nicht startet) immer sichtbar – und so bleiben Elemente, die beim Laden
+ *   schon im Bild oder darüber liegen.
+ * - "hidden": liegt beim Start komplett unterhalb des Bildschirms → wird unsichtbar geschaltet
+ *   (der Nutzer sieht es dort ohnehin nicht) und wartet aufs Hereinkommen.
+ * - "shown": ist ins Bild gekommen → Einblend-Animation läuft.
+ *
+ * Ausgelöst wird, sobald irgendein Teil des Elements den Bildschirm berührt oder es darüber liegt:
+ * - IntersectionObserver ohne Anteil-Schwelle: erkennt auch Bewegung ohne Scrollen (Layout-Verschiebung,
+ *   Einblend-Animation der Nachbarn). Eine Anteil-Schwelle („amount“) oder ein Rand-Streifen würde
+ *   große Blöcke bzw. am Rand stehenbleibende Elemente nie auslösen.
+ * - Scroll-Prüfung: fängt Elemente, die bei Sprüngen (Anker, Ende-Taste) übersprungen wurden – die
+ *   wechseln nie in den Zustand „im Bild“ und würden vom Observer nicht gemeldet.
+ * Alle Elemente teilen sich einen Observer und einen Scroll-Listener (pro Frame höchstens eine Prüfung).
  */
-export function useRevealed(ref: RefObject<Element | null>, offset = 0.06) {
-  const [shown, setShown] = useState(false)
+export type RevealPhase = "static" | "hidden" | "shown"
+
+export function useRevealPhase(ref: RefObject<Element | null>, { disabled = false } = {}): RevealPhase {
+  const [phase, setPhase] = useState<RevealPhase>("static")
 
   useEffect(() => {
     const el = ref.current
-    if (shown || !el) return
-    const check = () => {
-      if (el.getBoundingClientRect().top < window.innerHeight * (1 - offset)) {
-        setShown(true)
-        return true
-      }
-      return false
+    if (disabled || !el) return
+    let waiting = false
+    const reveal = () => {
+      if (!waiting) return
+      waiting = false
+      unwatch(el)
+      setPhase("shown")
     }
-    // Erste Prüfung erst im nächsten Frame: Nach einem Seitenwechsel springt die Seite zuvor noch nach oben
-    checks.add(check)
-    subscribe()
-    schedule()
+    // Erst im nächsten Frame messen: Nach einem Seitenwechsel springt die Seite zuvor noch nach oben
+    const frame = requestAnimationFrame(() => {
+      if (el.getBoundingClientRect().top < window.innerHeight) return // schon im Bild oder darüber → bleibt „static“
+      setPhase("hidden")
+      waiting = true
+      watch(el, reveal)
+    })
     return () => {
-      checks.delete(check)
+      cancelAnimationFrame(frame)
+      if (waiting) unwatch(el)
     }
-  }, [ref, offset, shown])
+  }, [ref, disabled])
 
-  return shown
+  return phase
 }
 
-const checks = new Set<() => boolean>()
+const callbacks = new Map<Element, () => void>()
+let observer: IntersectionObserver | null = null
 let listening = false
 let frame = 0
 
-function run() {
-  frame = 0
-  for (const check of [...checks]) if (check()) checks.delete(check)
+function watch(el: Element, cb: () => void) {
+  callbacks.set(el, cb)
+  observer ??= new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) callbacks.get(e.target)?.()
+  })
+  observer.observe(el)
+  if (!listening) {
+    listening = true
+    window.addEventListener("scroll", schedule, { passive: true })
+    window.addEventListener("resize", schedule)
+  }
+}
+
+function unwatch(el: Element) {
+  callbacks.delete(el)
+  observer?.unobserve(el)
 }
 
 function schedule() {
-  if (!frame) frame = requestAnimationFrame(run)
+  if (!frame) frame = requestAnimationFrame(checkAll)
 }
 
-function subscribe() {
-  if (listening) return
-  listening = true
-  window.addEventListener("scroll", schedule, { passive: true })
-  window.addEventListener("resize", schedule)
-  window.addEventListener("load", schedule)
+/** Elemente, die (z. B. nach einem Sprung) schon den Bildschirm erreicht oder überholt haben */
+function checkAll() {
+  frame = 0
+  for (const [el, cb] of [...callbacks]) if (el.getBoundingClientRect().top < window.innerHeight) cb()
 }

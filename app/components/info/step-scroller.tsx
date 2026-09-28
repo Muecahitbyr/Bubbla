@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import type { Step } from "~/content/info"
 import { cn } from "~/lib/cn"
 import { easeOutExpo } from "~/lib/motion"
+import { useHydrated } from "~/lib/use-hydrated"
 
 /**
  * Schritt-Ablauf: Links bleibt die aktuelle Schrittnummer fixiert stehen,
@@ -61,6 +62,8 @@ export function StepScroller({ steps }: { steps: Step[] }) {
 function StepCard({ step, index, active, onActive }: { step: Step; index: number; active: boolean; onActive: () => void }) {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { margin: "-45% 0px -45% 0px" })
+  // Fokus-Effekt (nicht aktive Schritte abgedunkelt) erst mit JavaScript – sonst blieben Schritt 2–5 dauerhaft grau
+  const hydrated = useHydrated()
 
   useEffect(() => {
     if (inView) onActive()
@@ -69,7 +72,7 @@ function StepCard({ step, index, active, onActive }: { step: Step; index: number
   return (
     <article
       ref={ref}
-      className={cn("bg-tile rounded-[26px] p-7 transition-opacity duration-700 md:p-10", "lg:opacity-40", active && "lg:opacity-100")}
+      className={cn("bg-tile rounded-[26px] p-7 transition-opacity duration-700 md:p-10", hydrated && !active && "lg:opacity-40")}
       aria-labelledby={`schritt-${index}`}
     >
       <p className="text-bubla mb-3 text-sm font-extrabold lg:hidden">Schritt {step.number}</p>

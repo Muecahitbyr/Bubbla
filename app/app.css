@@ -438,7 +438,7 @@
   animation: intro-rise 1.05s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 .intro-fade {
-  animation: intro-fade 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation: intro-fade 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 @media (prefers-reduced-motion: reduce) {
   .intro-word,

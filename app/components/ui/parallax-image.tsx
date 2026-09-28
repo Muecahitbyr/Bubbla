@@ -1,6 +1,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useRef } from "react"
 import { cn } from "~/lib/cn"
+import { imageSizes, responsiveImage } from "~/lib/images"
 
 /** Bild, das sich beim Scrollen langsamer bewegt als die Seite (Parallax). */
 export function ParallaxImage({
@@ -27,7 +28,7 @@ export function ParallaxImage({
   return (
     <div ref={ref} className={cn("relative overflow-hidden", className)}>
       <motion.img
-        src={src}
+        {...responsiveImage(src, imageSizes.half)}
         alt={alt}
         style={{ y, scale: reduce ? 1 : 1 + speed * 2.4, objectPosition: position }}
         className={cn("absolute inset-0 h-full w-full object-cover will-change-transform", imgClassName)}

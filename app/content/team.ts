@@ -14,6 +14,4 @@ export const team: TeamMember[] = [
 export const teamPhoto = {
   src: "/images/fahrschule/bubla-golf.webp",
   alt: "Fahrlehrer der Fahrschule Bubla lehnt am weißen Fahrschul-Golf mit Bubla-Beschriftung",
-  width: 1920,
-  height: 1149,
 }

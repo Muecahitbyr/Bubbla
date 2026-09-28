@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import { cn } from "~/lib/cn"
+import { imageSizes, responsiveImage } from "~/lib/images"
 import { Reveal } from "./reveal"
 
 /** Bento-Kachel: große Rundung, eigene Fläche, optional Hintergrundbild */
@@ -25,7 +26,7 @@ export function Tile({
       {image && (
         <>
           <img
-            src={image}
+            {...responsiveImage(image, imageSizes.wide)}
             alt={imageAlt}
             loading="lazy"
             decoding="async"
