@@ -30,14 +30,15 @@ node scripts/responsive-images.mjs   # nach neuen/ersetzten Fotos: Bildstufen + 
 
 ## Animationen – Grundregel
 
-**Kein Inhalt hängt an JavaScript.** Alles wird sichtbar vorgerendert; Zähler zeigen im HTML ihren Endwert.
+**Ohne JavaScript sichtbar, mit JavaScript animiert** (Progressive Enhancement). Alles wird sichtbar vorgerendert; Zähler zeigen im HTML ihren Endwert.
 
-- Überschriften, Einleitung und Buttons oben blenden per CSS ein (`.intro-word`, `.intro-fade` in `app/app.css`) – sie starten mit dem HTML, nicht erst mit JavaScript.
-- `Reveal`, `Stagger`, `Counter` (Einblenden beim Scrollen) nutzen `useRevealPhase` (`app/lib/use-revealed.ts`): Erst wenn JavaScript läuft, werden Elemente, die **komplett unterhalb** des Bildschirms liegen, unsichtbar geschaltet und beim Hereinkommen animiert. Ausgelöst wird bei der ersten Berührung mit dem Bildschirm (IntersectionObserver ohne Anteil-Schwelle) oder wenn ein Sprung sie überholt hat (Scroll-Prüfung).
-- Scroll-gekoppelte Deckkraft (`ScrollText`, Versprechen-Block, Schritt-Fokus) greift erst nach dem Hydrieren (`useHydrated`).
-- Hero der Startseite: feste Bildkarte im normalen Fluss (sichtbar ohne JavaScript), darüber die bewegliche Karte für den Zoom, die ihre Maße von der festen Karte abnimmt.
+- Überschriften, Einleitung, Buttons und die Hero-Bildkarte haben ihren Auftritt per CSS (`.intro-word`, `.intro-fade`, `.intro-card` in `app/app.css`) – er startet mit dem HTML. Die Hero-Karte bewegt sich dabei nur (kein Einblenden aus Deckkraft 0), damit das Foto sofort als gezeichnet zählt (LCP).
+- `Reveal`, `Stagger`, `Counter` (Einblenden beim Scrollen) nutzen `useRevealPhase` (`app/lib/use-revealed.ts`): Erst wenn JavaScript läuft, werden Elemente, die beim Laden **komplett unterhalb** des Bildschirms liegen (und alle Elemente einer per Navigation geöffneten Seite), unsichtbar geschaltet und beim Hereinkommen animiert. Auslöser: Oberkante erreicht 85 % der Bildschirmhöhe (IntersectionObserver, erkennt auch Bewegung ohne Scrollen), Element wurde übersprungen (Scroll-Prüfung) – und als Sicherheitsnetz: nach 0,7 s im Bild spätestens.
+- Parallax (`ParallaxImage`, `ZoomMedia`, Versprechen-Block), Hero-Zoom, Galerie und Kapitel-Sequenz laufen über Motion-MotionValues (transform/opacity, kein React-State pro Scroll-Pixel). Scroll-gekoppelte Deckkraft (`ScrollText`, Versprechen-Text, Schritt-Fokus) greift erst nach dem Hydrieren (`useHydrated`).
+- Hero der Startseite: feste Bildkarte im normalen Fluss (sichtbar ohne JavaScript), darüber die bewegliche Karte für den Zoom, die ihre Maße von der festen Karte abnimmt und nach deren Auftritt (oder beim ersten Scrollen) übernimmt.
+- „Bewegung reduzieren“: keine Scroll-Effekte, kein Parallax, alles sofort sichtbar.
 
-`tests/robustness.spec.ts` sichert das ab (ohne JavaScript, Sprung ans Seitenende, Reload mitten auf der Seite, Seitenwechsel, Zähler).
+`tests/robustness.spec.ts` sichert beide Seiten ab: ohne JavaScript alles sichtbar, Zähler mit echten Werten, nichts bleibt nach Sprung/Reload/Seitenwechsel unsichtbar – **und** mit JavaScript blenden Elemente sichtbar ein, Parallax-Bilder bewegen sich, der Hero zoomt, neue Seiten blenden nach der Navigation ein.
 
 ## Inhalte pflegen
 
@@ -142,7 +143,9 @@ Das Originalfoto ist nur 959 px breit und im Vollbild leicht unscharf. Mit eigen
 
 Netlify/Vercel/Cloudflare Pages: Build-Befehl `npm run build`, Ausgabeordner `build/client`.
 
-Hinweis Entwicklung: `npm run dev` schickt `Cache-Control: no-store` (Plugin in `vite.config.ts`). Safari hat sonst nach Dev-Server-Neustarts alte Module aus dem Cache mit neuen gemischt – JavaScript startete dann nicht.
+Hinweis Entwicklung (`vite.config.ts`):
+- `optimizeDeps.include` bündelt alle Browser-Bibliotheken (inkl. der Icons aus `app/lib/icons.ts`) schon beim Start. Sonst entdeckt Vite sie erst beim ersten Seitenaufruf nach einem Neustart, bündelt neu, und der gerade ladende Browser bekommt nicht mehr vorhandene Dateien – JavaScript startet dann nicht und die Seite bleibt statisch.
+- `Cache-Control: no-store`: Safari hat sonst alte Module aus dem Cache mit neuen gemischt.
 
 ## Tests
 

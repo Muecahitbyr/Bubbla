@@ -146,3 +146,72 @@ test.describe("Bilder", () => {
     expect(images.filter((p) => p.includes("bubla-golf")).length).toBe(1)
   })
 })
+
+/**
+ * Gegenprobe zu oben: Mit JavaScript muss sich die Seite tatsächlich bewegen –
+ * sonst wäre „sichtbar“ nur mit einer statischen Seite erkauft.
+ */
+test.describe("Animationen laufen (mit JavaScript)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" })
+    await page.waitForTimeout(400)
+  })
+
+  test("Elemente unterhalb warten unsichtbar und blenden beim Scrollen mit Zwischenschritten ein", async ({ page }) => {
+    const waiting = await page.locator("main [style*='opacity: 0'], main [style*='opacity:0']").count()
+    expect(waiting).toBeGreaterThan(10)
+    // Deckkraft des ersten Kennzahl-Blocks pro Frame mitschreiben, dann langsam hinscrollen
+    await page.evaluate(() => {
+      const el = document.querySelector("main [data-counter]")!.closest("div")!
+      const seen: number[] = ((window as unknown as { __seen: number[] }).__seen = [])
+      const loop = () => (seen.push(Number(getComputedStyle(el).opacity)), requestAnimationFrame(loop))
+      loop()
+    })
+    const target = await page.locator("main [data-counter]").first().evaluate((e) => e.getBoundingClientRect().top + scrollY - innerHeight * 0.5)
+    for (let y = 0; y < target; y += 150) {
+      await page.evaluate((y) => window.scrollTo(0, y), y)
+      await page.waitForTimeout(30)
+    }
+    await page.waitForTimeout(1500)
+    const seen = await page.evaluate(() => (window as unknown as { __seen: number[] }).__seen)
+    expect(Math.min(...seen)).toBeLessThan(0.05) // wartete unsichtbar
+    expect(seen.some((o) => o > 0.15 && o < 0.85)).toBe(true) // weiche Einblendung, kein Sprung
+    expect(seen.at(-1)).toBeGreaterThan(0.99) // Endzustand erreicht
+  })
+
+  test("Parallax: Bild bewegt sich beim Scrollen innerhalb seines Rahmens", async ({ page }) => {
+    const img = page.locator("section[aria-label='Unser Versprechen'] img")
+    await img.scrollIntoViewIfNeeded()
+    const offset = () => img.evaluate((el) => el.getBoundingClientRect().top - el.parentElement!.getBoundingClientRect().top)
+    const a = await offset()
+    await page.evaluate(() => window.scrollBy(0, 500))
+    await page.waitForTimeout(900)
+    const b = await offset()
+    expect(Math.abs(b - a)).toBeGreaterThan(20)
+  })
+
+  test("Hero: Bildkarte zoomt beim Scrollen zum Vollbild", async ({ page }) => {
+    const layer = page.locator("section[aria-label=Willkommen] .z-10")
+    const width = () => layer.evaluate((el) => { const m = /inset\(([\d.]+)px ([\d.]+)px/.exec(getComputedStyle(el).clipPath); return m ? innerWidth - 2 * Number(m[2]) : el.getBoundingClientRect().width })
+    const start = await width()
+    await page.evaluate(() => window.scrollTo(0, innerHeight * 0.9))
+    await page.waitForTimeout(900)
+    expect(await width()).toBeGreaterThan(start + 20)
+    expect(await layer.evaluate((el) => Number(getComputedStyle(el).opacity))).toBe(1)
+  })
+
+  test("Seitenwechsel und Zurück: Inhalte der neuen Seite blenden ein und sind danach sichtbar", async ({ page }) => {
+    await page.locator("footer a[href='/team.htm']").first().click()
+    await page.waitForURL("**/team.htm")
+    // gleich nach dem Wechsel: Inhalte im Bild blenden ein (starten unsichtbar)
+    const animating = await page.evaluate(() => [...document.querySelectorAll("main [style*='opacity']")].some((el) => Number(getComputedStyle(el).opacity) < 0.95))
+    expect(animating).toBe(true)
+    await page.waitForTimeout(1600)
+    expect(await invisibleContent(page, page.viewportSize()!.height)).toEqual([])
+    await page.goBack()
+    await page.waitForURL((u) => u.pathname === "/")
+    await page.waitForTimeout(1600)
+    const y = await page.evaluate(() => scrollY)
+    expect(await invisibleContent(page, y + page.viewportSize()!.height * 0.8, SCROLL_LINKED)).toEqual([])
+  })
+})

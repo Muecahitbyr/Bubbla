@@ -34,13 +34,17 @@ export function HomeHero() {
   // Gemessene Kartenränder in px. Werte werden direkt gesetzt (useMotionValueEvent) –
   // ein automatisch verknüpftes useTransform(() => …) reagiert im Dev-Modus nicht auf neue Messwerte.
   const dims = useRef({ top: 480, side: 40, bottom: 40, startH: 380, mobile: false, vw: 1440, vh: 900 })
+  // Pro Frame ändern sich nur clip-path (Fenster) und transform (Foto) – keine Layout-Eigenschaften,
+  // also keine Layout-Verschiebung (CLS) und nichts, was der Browser neu anordnen müsste
   const clipPath = useMotionValue("inset(480px 40px 40px 40px round 32px)")
-  const boxTop = useMotionValue(0)
-  const boxSide = useMotionValue(0)
-  const boxH = useMotionValue("100%")
-  const boxRadius = useMotionValue(0)
+  // Rahmen des Fotos: Desktop = ganze Fläche, Handy = Lage der festen Karte. Nur bei Größenänderung gesetzt.
+  const imgTop = useMotionValue(0)
+  const imgLeft = useMotionValue(0)
+  const imgW = useMotionValue<number | string>("100%")
+  const imgH = useMotionValue<number | string>("100%")
   // Desktop: Im Startzustand wird das Foto verkleinert und so verschoben, dass das ganze Motiv
-  // in der flachen Karte sitzt; beim Aufziehen wächst es auf Vollbildgröße
+  // in der flachen Karte sitzt; beim Aufziehen wächst es auf Vollbildgröße.
+  // Handy: Das Foto wandert und wächst von der Karte zum vollbreiten Band.
   const imgShift = useMotionValue(0)
   const imgScale = useMotionValue(1.06)
   // Bewegliche Karte erst einblenden, wenn sie gemessen ist – bis dahin zeigt die feste Karte das Foto
@@ -50,10 +54,6 @@ export function HomeHero() {
     const t = reduce ? 0 : ease(clamp01(p.get() / 0.5))
     const { top, side, bottom, startH, mobile, vw, vh } = dims.current
     if (!mobile) {
-      boxTop.set(0)
-      boxSide.set(0)
-      boxH.set("100%")
-      boxRadius.set(0)
       // Kleinste Größe, bei der das Foto die Karte noch ganz füllt (kein leerer Rand)
       const s0 = Math.min(1, Math.max((vw - 2 * side) / vw, (vh - top - bottom) / vh, 0.8) + 0.02)
       imgScale.set(s0 + (1 - s0) * t)
@@ -63,17 +63,19 @@ export function HomeHero() {
       return
     }
     // Handy: Das Querformat-Foto nicht auf den hohen Bildschirm aufziehen (starker Beschnitt),
-    // sondern die Karte selbst zu einem vollbreiten Band unter der Navigation wachsen lassen.
+    // sondern die Karte zu einem vollbreiten Band unter der Navigation wachsen lassen:
+    // Fenster per clip-path, Foto (liegt in Kartengröße) per transform mitverschoben und -skaliert.
     const lerp = (a: number, b: number) => a + (b - a) * t
     const endH = vw * MOBILE_BAND_RATIO
-    clipPath.set("none")
-    imgShift.set(0)
-    imgScale.set(1.06 - 0.06 * t)
-    boxTop.set(lerp(top, MOBILE_BAND_TOP))
-    boxSide.set(lerp(side, 0))
-    boxH.set(`${lerp(startH, endH)}px`)
-    boxRadius.set(lerp(26, 0))
-  }, [p, reduce, clipPath, boxTop, boxSide, boxH, boxRadius, imgShift, imgScale])
+    const cTop = lerp(top, MOBILE_BAND_TOP)
+    const cSide = lerp(side, 0)
+    const cH = lerp(startH, endH)
+    clipPath.set(`inset(${cTop}px ${cSide}px ${Math.max(0, vh - cTop - cH)}px ${cSide}px round ${lerp(26, 0)}px)`)
+    // Endzustand: Foto deckt das Band ganz ab (Mitte auf Mitte, gleichmäßig skaliert)
+    const sEnd = Math.max(vw / (vw - 2 * side), endH / startH)
+    imgShift.set((MOBILE_BAND_TOP + endH / 2 - (top + startH / 2)) * t)
+    imgScale.set((1.06 - 0.06 * t) * (1 + (sEnd - 1) * t))
+  }, [p, reduce, clipPath, imgShift, imgScale])
   useMotionValueEvent(p, "change", update)
 
   useEffect(() => {
@@ -81,14 +83,21 @@ export function HomeHero() {
     const measure = () => {
       const slot = slotRef.current
       if (!slot) return
-      const vw = window.innerWidth
-      const vh = window.innerHeight
+      // Maße der Bühne (sticky-Container) – darauf beziehen sich clip-path und Fotorahmen
+      const stage = slot.parentElement!
+      const vw = stage.clientWidth
+      const vh = stage.clientHeight
+      const mobile = window.innerWidth < 768
+      imgTop.set(mobile ? slot.offsetTop : 0)
+      imgLeft.set(mobile ? slot.offsetLeft : 0)
+      imgW.set(mobile ? slot.offsetWidth : "100%")
+      imgH.set(mobile ? slot.offsetHeight : "100%")
       dims.current = {
         top: slot.offsetTop,
         side: slot.offsetLeft,
         bottom: Math.max(0, vh - slot.offsetTop - slot.offsetHeight),
         startH: slot.offsetHeight,
-        mobile: vw < 768,
+        mobile,
         vw,
         vh,
       }
@@ -100,24 +109,31 @@ export function HomeHero() {
     if (slotRef.current) ro.observe(slotRef.current)
     window.addEventListener("resize", measure)
 
-    // Erst einblenden, wenn die Schrift geladen ist (sonst ändert sich die Höhe der Headline noch)
+    // Übergabe an die bewegliche Karte: erst wenn die Schrift geladen ist (Höhe der Headline steht) und der
+    // CSS-Auftritt der festen Karte durchgelaufen ist – oder sofort, sobald gescrollt wird (Zoom soll nie fehlen)
     let cancelled = false
-    const fontsReady = document.fonts?.ready ?? Promise.resolve()
-    Promise.race([fontsReady, new Promise((r) => setTimeout(r, 300))]).then(() => {
-      if (cancelled) return
+    let handedOver = false
+    const handOver = (duration: number) => {
+      if (cancelled || handedOver) return
+      handedOver = true
       measure()
       // Über die feste Karte blenden; danach die feste Karte ausblenden (die bewegliche wächst beim Scrollen über sie hinaus)
-      animate(cardOpacity, 1, { duration: reduce ? 0 : 0.3, ease: easeOutExpo }).then(() => {
+      animate(cardOpacity, 1, { duration: reduce ? 0 : duration, ease: easeOutExpo }).then(() => {
         if (!cancelled) setLayerOn(true)
       })
-    })
+    }
+    const fontsReady = document.fonts?.ready ?? Promise.resolve()
+    const slotIntro = (slotRef.current?.getAnimations?.({ subtree: true }) ?? []).map((a) => a.finished.catch(() => undefined))
+    Promise.all([Promise.race([fontsReady, new Promise((r) => setTimeout(r, 300))]), ...slotIntro]).then(() => handOver(0.3))
+    const unsubscribe = p.on("change", (v) => v > 0.002 && handOver(0.15))
 
     return () => {
       cancelled = true
+      unsubscribe()
       ro.disconnect()
       window.removeEventListener("resize", measure)
     }
-  }, [cardOpacity, reduce, update])
+  }, [cardOpacity, reduce, update, p])
 
   // Deckkraft & Co. per Funktion aus dem Scrollwert (nicht über die beschleunigte Scroll-Timeline)
   const range = (a: number, b: number) => (reduce ? 0 : clamp01((p.get() - a) / (b - a)))
@@ -136,14 +152,14 @@ export function HomeHero() {
         {/* Bewegliche Karte: optisches Duplikat der festen Karte (für Screenreader ausgeblendet) */}
         <motion.div
           aria-hidden
-          className="absolute z-10 overflow-hidden will-change-[clip-path]"
-          style={{ clipPath, opacity: cardOpacity, top: boxTop, left: boxSide, right: boxSide, height: boxH, borderRadius: boxRadius }}
+          className="absolute inset-0 z-10 overflow-hidden will-change-[clip-path]"
+          style={{ clipPath, opacity: cardOpacity }}
         >
           <motion.img
             {...heroImage}
             alt=""
-            style={{ scale: imgScale, y: imgShift }}
-            className="h-full w-full object-cover object-[78%_60%] md:object-[55%_58%]"
+            style={{ top: imgTop, left: imgLeft, width: imgW, height: imgH, scale: imgScale, y: imgShift }}
+            className="absolute max-w-none object-cover object-[78%_60%] will-change-transform md:object-[55%_58%]"
             fetchPriority="high"
             decoding="async"
           />
@@ -185,7 +201,8 @@ export function HomeHero() {
         <div
           ref={slotRef}
           className={cn(
-            "relative z-0 mx-4 mt-6 mb-6 h-[calc((100vw_-_2rem)*0.95)] min-h-[140px] shrink overflow-hidden rounded-[26px]",
+            // intro-card: Auftritt beim Laden per CSS (läuft auch ohne JavaScript)
+            "intro-card relative z-0 mx-4 mt-6 mb-6 h-[calc((100vw_-_2rem)*0.95)] min-h-[140px] shrink overflow-hidden rounded-[26px]",
             "md:mx-[max(24px,calc((100vw_-_1280px)/2_+_40px))] md:mt-10 md:mb-[max(24px,5vh)] md:h-auto md:min-h-0 md:flex-1 md:rounded-[32px]",
             layerOn && "invisible",
           )}

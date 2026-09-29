@@ -426,6 +426,18 @@
     opacity: 0;
   }
 }
+/* Karte gleitet herauf und das Foto darin zoomt leicht heraus – bewusst OHNE Deckkraft 0:
+   das Bild ist ab dem ersten Frame sichtbar (sonst zählt der Browser es erst nach der Animation → später LCP) */
+@keyframes intro-card {
+  from {
+    transform: translateY(40px) scale(0.97);
+  }
+}
+@keyframes intro-card-img {
+  from {
+    transform: scale(1.12);
+  }
+}
 @keyframes intro-fade {
   from {
     transform: translateY(16px);
@@ -440,9 +452,19 @@
 .intro-fade {
   animation: intro-fade 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
+/* Hero-Bildkarte der Startseite */
+/* kurz gehalten: Browser werten das Hero-Foto erst nach der Animation als gezeichnet (LCP) */
+.intro-card {
+  animation: intro-card 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.intro-card > img {
+  animation: intro-card-img 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
 @media (prefers-reduced-motion: reduce) {
   .intro-word,
-  .intro-fade {
+  .intro-fade,
+  .intro-card,
+  .intro-card > img {
     animation: none !important;
   }
 }
