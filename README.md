@@ -91,7 +91,7 @@ SEO je Seite: Titel und Beschreibung (bisherige Werte übernommen und je Seite e
 
 **Echtes Bildmaterial der Fahrschule** (mehr gab es auf der alten Seite nicht – dort waren alle übrigen Bilder ebenfalls Stockfotos):
 
-- `public/images/logo.svg` – Originallogo als Vektor nachgebaut (Arial wie im Original, Gelb `#F8E322`, Blau `#0365E1`); wird auf der Website verwendet. `public/images/logo.png` – Originaldatei (für JSON-LD).
+- `public/images/logo.svg` – Originallogo als Vektor nachgebaut (Arial wie im Original, Gelb `#F8E322`, Blau `#005BA4` – im Original `#0365E1`, auf Wunsch an das Bubla-Blau der Website angeglichen); wird auf der Website verwendet. `public/images/logo.png` – Originaldatei mit demselben Blau (für JSON-LD).
 - `public/images/b-mark.svg`, `public/favicon.svg`, `public/apple-touch-icon.png` – „B“ im Logo-Stil.
 - `public/images/fahrschule/bubla-golf.webp` – Originalfoto (Fahrschul-Golf mit Bubla-Beschriftung und Fahrlehrer), aus der alten Seite, auf 1920 px hochgerechnet. Startseiten-Hero, Team, `public/og-image.jpg` (Vorschaubild beim Teilen, mit Logo).
 - `public/images/stock/` – Fotos von [Pexels](https://www.pexels.com/license/) (kostenlos, auch kommerziell, keine Quellenangabe nötig), als WebP (max. 2400 px). Jederzeit durch eigene Fotos ersetzbar (gleicher Dateiname).

@@ -12,7 +12,6 @@
 
   /* Markenfarben (Logo + bisheriger Webauftritt) */
   --color-bubla: #005ba4; /* Bubla-Blau – Text, Links, Flächen */
-  --color-bubla-bright: #0365e1; /* Logo-Blau – Leuchtakzente */
   --color-sun: #f8e322; /* Logo-Gelb */
   --color-sun-deep: #e8c900;
   --color-night: #061c33; /* Tiefblau für dunkle Sektionen */
@@ -199,7 +198,7 @@
   }
 
   :focus-visible {
-    outline: 2.5px solid var(--color-bubla-bright);
+    outline: 2.5px solid var(--color-bubla);
     outline-offset: 3px;
     border-radius: 10px;
   }
@@ -307,7 +306,7 @@
 }
 
 @utility grad-blue {
-  background-image: linear-gradient(100deg, #0a74f0 0%, #005ba4 70%);
+  background-image: linear-gradient(#005ba4, #005ba4); /* einheitliches Bubla-Blau */
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -334,7 +333,7 @@
   background-image: linear-gradient(180deg, var(--ink-a) 35%, var(--ink-b) 115%);
 }
 .grad-blue .word {
-  background-image: linear-gradient(100deg, #0a74f0 0%, #005ba4 70%);
+  background-image: linear-gradient(#005ba4, #005ba4); /* einheitliches Bubla-Blau */
 }
 .grad-sun .word {
   background-image: linear-gradient(100deg, #fff27a 0%, #f8e322 45%, #f2c200 100%);

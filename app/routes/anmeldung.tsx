@@ -21,7 +21,7 @@ export const meta: MetaFunction = () =>
   })
 
 
-const field = "bg-tile focus:ring-bubla-bright w-full rounded-2xl px-4 py-3.5 text-[16px] outline-none ring-1 ring-transparent transition focus:bg-white focus:ring-2"
+const field = "bg-tile focus:ring-bubla w-full rounded-2xl px-4 py-3.5 text-[16px] outline-none ring-1 ring-transparent transition focus:bg-white focus:ring-2"
 const label = "mb-1.5 block text-[14px] font-bold"
 
 export default function Anmeldung() {

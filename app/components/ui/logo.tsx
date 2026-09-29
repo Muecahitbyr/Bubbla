@@ -1,6 +1,6 @@
 import { cn } from "~/lib/cn"
 
-/** Originales Bubla-Logo als Vektor (Arial wie im Original, Farben #F8E322 / #0365E1) – bleibt in jeder Größe scharf */
+/** Originales Bubla-Logo als Vektor (Arial wie im Original, Farben #F8E322 / Bubla-Blau #005BA4) – bleibt in jeder Größe scharf */
 export function Logo({ className }: { className?: string }) {
   return (
     <img
