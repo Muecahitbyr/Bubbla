@@ -20,7 +20,7 @@ const columns: { title: string; links: [string, string][] }[] = [
   { title: "Zweirad", links: bikeClasses.map((c) => [`${c.code} · ${c.name}`, c.path] as [string, string]) },
 ]
 
-/** Footer in Tiefblau mit Logo auf heller Karte */
+/** Footer in Bubla-Blau mit Logo auf heller Karte */
 export function Footer() {
   const lenis = useLenis()
   const toTop = () => (lenis ? lenis.scrollTo(0, { duration: 1.6 }) : window.scrollTo({ top: 0, behavior: "smooth" }))

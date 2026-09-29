@@ -18,12 +18,12 @@ export function CtaBand({
       <div className="tone-sun relative isolate overflow-hidden rounded-[34px] px-6 py-24 md:py-36">
         {/* Straße mit Mittelstreifen als ruhige Grafik */}
         <svg aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-[70%] w-full opacity-[0.14]" preserveAspectRatio="none" viewBox="0 0 1200 400">
-          <path d="M-50 400 C 300 360, 520 240, 700 180 S 1050 60, 1300 40" fill="none" stroke="#0b1b2b" strokeWidth="90" />
+          <path d="M-50 400 C 300 360, 520 240, 700 180 S 1050 60, 1300 40" fill="none" stroke="#141414" strokeWidth="90" />
           <path d="M-50 400 C 300 360, 520 240, 700 180 S 1050 60, 1300 40" fill="none" stroke="#ffffff" strokeWidth="6" strokeDasharray="38 26" />
         </svg>
         <div className="wrap-narrow text-center">
           <Reveal>
-            <span className="mb-10 inline-block -rotate-2 rounded-[22px] bg-white px-6 py-4 shadow-[0_18px_40px_-18px_rgb(6_28_51/0.45)] md:mb-12">
+            <span className="mb-10 inline-block -rotate-2 rounded-[22px] bg-white px-6 py-4 shadow-[0_18px_40px_-18px_rgb(0_0_0/0.45)] md:mb-12">
               <Logo className="h-16 md:h-20" />
             </span>
           </Reveal>

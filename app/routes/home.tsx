@@ -312,7 +312,7 @@ function PromiseParallax() {
         style={{ y: imgY, scale: 1.34 }}
         className="absolute inset-0 h-full w-full object-cover object-[center_35%]"
       />
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#061c33]/55 via-[#061c33]/35 to-[#061c33]/70" />
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[#005ba4]/55 via-[#005ba4]/35 to-[#005ba4]/70" />
       <motion.div style={hydrated ? { y: textY, opacity: textOpacity } : undefined} className="wrap relative flex h-full flex-col items-start justify-center">
         <p className="kicker mb-6">Unser Versprechen</p>
         <p className="display-xl max-w-[12ch] pb-3 text-white">

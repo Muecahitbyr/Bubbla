@@ -27,7 +27,7 @@ export function ClassCard({ item, className }: { item: ClassCardItem; className?
         style={{ objectPosition: item.imagePosition }}
         className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-[1.6s] ease-[var(--ease-out-expo)] group-hover:scale-[1.06]"
       />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-[#061c33]/40 via-transparent to-[#061c33]/95" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-[#005ba4]/40 via-transparent to-[#005ba4]/95" />
       <div className="flex h-full flex-col justify-between p-6 md:p-7">
         <div className="flex items-start justify-between gap-3">
           <Plate code={item.code} />

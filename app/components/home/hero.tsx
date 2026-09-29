@@ -163,7 +163,7 @@ export function HomeHero() {
             fetchPriority="high"
             decoding="async"
           />
-          <motion.div aria-hidden className="absolute inset-0 hidden bg-gradient-to-t from-[#061c33] via-[#061c33]/40 to-transparent md:block" style={{ opacity: shade }} />
+          <motion.div aria-hidden className="absolute inset-0 hidden bg-gradient-to-t from-[#005ba4] via-[#005ba4]/40 to-transparent md:block" style={{ opacity: shade }} />
         </motion.div>
 
         {/* Headline – linksbündig, rechts daneben Einleitung & Aktionen */}

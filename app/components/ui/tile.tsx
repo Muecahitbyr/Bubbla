@@ -36,7 +36,7 @@ export function Tile({
           {shade !== "none" && (
             <div
               aria-hidden
-              className={cn("absolute inset-0 -z-10", shade === "bottom" ? "bg-gradient-to-t from-[#061c33]/90 via-[#061c33]/25 to-transparent" : "bg-[#061c33]/55")}
+              className={cn("absolute inset-0 -z-10", shade === "bottom" ? "bg-gradient-to-t from-[#005ba4]/90 via-[#005ba4]/25 to-transparent" : "bg-[#005ba4]/55")}
             />
           )}
         </>

@@ -99,7 +99,7 @@ export function Assistant() {
             exit={{ opacity: 0, y: 12, scale: 0.97, transition: { duration: 0.18 } }}
             transition={{ duration: 0.4, ease: easeOutExpo }}
             data-lenis-prevent
-            className="fixed right-2 bottom-[72px] left-2 z-[60] flex outline-none max-h-[min(560px,70svh)] md:max-h-[min(640px,calc(100svh-var(--nav-offset)-84px))] origin-bottom-right flex-col overflow-hidden rounded-[28px] bg-white text-ink shadow-[0_30px_90px_-20px_rgb(6_28_51/0.55)] ring-1 ring-black/5 sm:left-auto sm:w-[400px] md:right-5 md:bottom-[96px]"
+            className="fixed right-2 bottom-[72px] left-2 z-[60] flex outline-none max-h-[min(560px,70svh)] md:max-h-[min(640px,calc(100svh-var(--nav-offset)-84px))] origin-bottom-right flex-col overflow-hidden rounded-[28px] bg-white text-ink shadow-[0_30px_90px_-20px_rgb(0_0_0/0.55)] ring-1 ring-black/5 sm:left-auto sm:w-[400px] md:right-5 md:bottom-[96px]"
           >
             <div className="tone-night flex items-center justify-between gap-3 px-5 py-4">
               <div className="flex items-center gap-3">
@@ -180,7 +180,7 @@ export function Assistant() {
         aria-expanded={open}
         aria-label={open ? "Fahrschul-Assistent schließen" : "Fahrschul-Assistent öffnen"}
         className={cn(
-          "fixed right-3 bottom-3 z-[60] inline-flex h-12 items-center gap-2 rounded-full pr-4 pl-3.5 font-bold md:pr-5 md:pl-4 shadow-[0_16px_40px_-12px_rgb(6_28_51/0.55)] transition-all duration-300 active:scale-95 md:right-5 md:bottom-5 md:h-[60px]",
+          "fixed right-3 bottom-3 z-[60] inline-flex h-12 items-center gap-2 rounded-full pr-4 pl-3.5 font-bold md:pr-5 md:pl-4 shadow-[0_16px_40px_-12px_rgb(0_0_0/0.55)] transition-all duration-300 active:scale-95 md:right-5 md:bottom-5 md:h-[60px]",
           open ? "bg-night text-white" : "bg-night text-white ring-2 ring-white/70 hover:-translate-y-0.5",
         )}
       >

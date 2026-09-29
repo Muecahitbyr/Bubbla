@@ -20,7 +20,7 @@ export function LocalNav({
   return (
     <div className={cn("pointer-events-none fixed inset-x-0 top-[var(--nav-offset)] z-40", className)}>
       <div className="wrap !px-2 sm:!px-4 md:!px-6">
-        <div className="pointer-events-auto flex h-11 items-center justify-between gap-4 rounded-full bg-white/70 pr-1.5 pl-5 text-ink shadow-[0_0_0_1px_rgb(6_28_51/0.07)] backdrop-blur-xl md:h-12">
+        <div className="pointer-events-auto flex h-11 items-center justify-between gap-4 rounded-full bg-white/70 pr-1.5 pl-5 text-ink shadow-[0_0_0_1px_rgb(0_0_0/0.07)] backdrop-blur-xl md:h-12">
           <p className="truncate text-[15px] font-bold tracking-[-0.015em] md:text-[17px]">{title}</p>
           <div className="flex shrink-0 items-center gap-5">
             {links.length > 0 && (

@@ -144,7 +144,7 @@ export function Navbar() {
                 className="absolute inset-x-0 mx-auto mt-2 hidden max-w-[1040px] origin-top px-6 lg:block"
                 onMouseEnter={open}
               >
-                <div className="grid grid-cols-12 gap-8 rounded-[28px] bg-white p-8 text-ink shadow-[0_30px_80px_-30px_rgb(6_28_51/0.45)] ring-1 ring-black/5">
+                <div className="grid grid-cols-12 gap-8 rounded-[28px] bg-white p-8 text-ink shadow-[0_30px_80px_-30px_rgb(0_0_0/0.45)] ring-1 ring-black/5">
                   {(["auto", "zweirad"] as Category[]).map((cat) => (
                     <div key={cat} className="col-span-4">
                       <p className="kicker mb-4">{categoryLabels[cat]}</p>
@@ -189,7 +189,7 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 hidden bg-[#061c33]/20 backdrop-blur-md lg:block"
+            className="fixed inset-0 z-40 hidden bg-[#005ba4]/20 backdrop-blur-md lg:block"
             onMouseEnter={close}
             onClick={() => setFlyout(false)}
             aria-hidden

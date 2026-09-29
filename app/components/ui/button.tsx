@@ -7,9 +7,9 @@ type Variant = "primary" | "dark" | "ghost" | "light" | "link"
 type Size = "sm" | "md" | "lg"
 
 const variants: Record<Variant, string> = {
-  // Hauptaktion: gelb – auf gelben Flächen automatisch tiefblau (Variablen in app.css)
+  // Hauptaktion: gelb – auf gelben Flächen automatisch blau (Variablen in app.css)
   primary: "bg-[var(--btn-bg)] text-[var(--btn-fg)] hover:brightness-105 shadow-[0_10px_28px_-14px_var(--btn-shadow)]",
-  dark: "bg-night text-white hover:bg-[#0c2946]",
+  dark: "bg-night text-white hover:brightness-110",
   ghost: "ring-1 ring-inset ring-line text-fg hover:bg-fg/[0.06]",
   light: "bg-white text-ink hover:bg-white/90",
   link: "text-accent !p-0 hover:gap-3",

@@ -4,7 +4,7 @@
 
 /* ================================================================== */
 /*  Design-Tokens: Bubla-Gelb als Hauptfarbe                           */
-/*  Gelb für große Flächen & Aktionen, Blau/Tiefblau für Text & Kontrast */
+/*  Gelb für große Flächen & Aktionen, Bubla-Blau #005BA4 als einziges Blau */
 /* ================================================================== */
 
 @theme {
@@ -14,8 +14,8 @@
   --color-bubla: #005ba4; /* Bubla-Blau – Text, Links, Flächen */
   --color-sun: #f8e322; /* Logo-Gelb */
   --color-sun-deep: #e8c900;
-  --color-night: #061c33; /* Tiefblau für dunkle Sektionen */
-  --color-ink: #0b1b2b;
+  --color-night: #005ba4; /* Bubla-Blau für blaue Sektionen (Footer, Team, Werte …) – einziges Blau der Seite */
+  --color-ink: #141414; /* neutrales Fast-Schwarz (kein Blaustich) */
   --color-mist: #fff6c4; /* zartes Gelb für kleine Flächen (Chat, Menü-Hover) */
 
   --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -36,14 +36,14 @@
 :root,
 .tone-paper {
   --bg: #ffffff;
-  --tile: #f2f6fb;
-  --tile-2: #e3ecf6;
-  --fg: #0b1b2b;
-  --muted: #56667a;
-  --line: rgb(11 27 43 / 0.1);
+  --tile: #f4f4f1;
+  --tile-2: #e7e6e1;
+  --fg: #141414;
+  --muted: #5e5e5e;
+  --line: rgb(0 0 0 / 0.1);
   --accent: #005ba4;
-  --ink-a: #0b1b2b;
-  --ink-b: #1d4e80;
+  --ink-a: #141414;
+  --ink-b: #141414;
   color-scheme: light;
 }
 
@@ -52,26 +52,26 @@
   --bg: #fff8d9;
   --tile: #ffffff;
   --tile-2: #ede5c3;
-  --fg: #0b1b2b;
+  --fg: #141414;
   --muted: #5a5337;
   --line: rgb(107 90 0 / 0.16);
   --accent: #005ba4;
-  --ink-a: #0b1b2b;
-  --ink-b: #1d4e80;
+  --ink-a: #141414;
+  --ink-b: #141414;
   color-scheme: light;
 }
 
-/* Tiefblau – ersetzt das Schwarz klassischer Apple-Seiten */
+/* Bubla-Blau #005BA4 – blaue Flächen; Kacheln/Linien als helle Schleier statt weiterer Blautöne */
 .tone-night {
-  --bg: #061c33;
-  --tile: #0c2946;
-  --tile-2: #123456;
-  --fg: #f3f7fc;
-  --muted: #9fb3c8;
-  --line: rgb(255 255 255 / 0.14);
+  --bg: #005ba4;
+  --tile: rgb(255 255 255 / 0.1);
+  --tile-2: rgb(255 255 255 / 0.18);
+  --fg: #ffffff;
+  --muted: rgb(255 255 255 / 0.8);
+  --line: rgb(255 255 255 / 0.22);
   --accent: #f8e322;
   --ink-a: #ffffff;
-  --ink-b: #b9cde3;
+  --ink-b: #ffffff;
   color-scheme: dark;
 }
 
@@ -80,36 +80,36 @@
   --bg: #f8e322;
   --tile: #fdf29a;
   --tile-2: #efd600;
-  --fg: #0b1b2b;
+  --fg: #141414;
   --muted: #564d00;
-  --line: rgb(11 27 43 / 0.16);
-  --accent: #0b1b2b;
-  --ink-a: #0b1b2b;
-  --ink-b: #1d4e80;
+  --line: rgb(0 0 0 / 0.16);
+  --accent: #141414;
+  --ink-a: #141414;
+  --ink-b: #141414;
   color-scheme: light;
 }
 
 /* Kontextfarben: Buttons, Fahrbahn-Striche und Fortschrittsbalken passen sich der Fläche an
-   (auf Gelb wird aus dem gelben Button automatisch ein tiefblauer) */
+   (auf Gelb wird aus dem gelben Button automatisch ein blauer) */
 :root,
 .tone-paper,
 .tone-mist,
 .tone-night {
   --btn-bg: #f8e322;
-  --btn-fg: #0b1b2b;
+  --btn-fg: #141414;
   --btn-shadow: rgb(232 201 0 / 0.9);
   --lane-color: #f8e322;
   --progress: #f8e322;
 }
 .tone-mist {
-  --progress: #061c33;
+  --progress: #005ba4;
 }
 .tone-sun {
-  --btn-bg: #061c33;
+  --btn-bg: #005ba4;
   --btn-fg: #ffffff;
-  --btn-shadow: rgb(6 28 51 / 0.45);
-  --lane-color: #0b1b2b;
-  --progress: #061c33;
+  --btn-shadow: rgb(0 0 0 / 0.45);
+  --lane-color: #141414;
+  --progress: #005ba4;
 }
 
 .tone-paper,
@@ -378,12 +378,12 @@
   backdrop-filter: saturate(180%) blur(22px);
   box-shadow:
     0 1px 0 rgb(255 255 255 / 0.6) inset,
-    0 10px 30px -12px rgb(6 28 51 / 0.28),
-    0 0 0 1px rgb(6 28 51 / 0.07);
+    0 10px 30px -12px rgb(0 0 0 / 0.28),
+    0 0 0 1px rgb(0 0 0 / 0.07);
 }
 
 @utility glass-dark {
-  background: rgb(6 28 51 / 0.42);
+  background: rgb(0 0 0 / 0.42);
   -webkit-backdrop-filter: saturate(160%) blur(18px);
   backdrop-filter: saturate(160%) blur(18px);
   border: 1px solid rgb(255 255 255 / 0.16);
