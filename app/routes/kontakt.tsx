@@ -72,7 +72,7 @@ export default function Kontakt() {
           <Reveal className="tone-night mt-4 grid gap-8 rounded-[26px] p-7 md:grid-cols-2 md:p-10">
             <div>
               <p className="kicker">Theorieunterricht</p>
-              <p className="mt-5 text-[26px] font-extrabold tracking-[-0.02em] text-white">{site.hours.theoryDays.join(", ")}</p>
+              <p className="mt-5 text-[26px] font-extrabold tracking-[-0.02em] text-white">{site.hours.theoryDaysShort}</p>
               <p className="text-sun mt-1 text-[22px] font-bold">{site.hours.theoryTime}</p>
             </div>
             <div>

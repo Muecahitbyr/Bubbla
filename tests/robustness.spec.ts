@@ -215,3 +215,26 @@ test.describe("Animationen laufen (mit JavaScript)", () => {
     expect(await invisibleContent(page, y + page.viewportSize()!.height * 0.8, SCROLL_LINKED)).toEqual([])
   })
 })
+
+test.describe("Mobiles Menü", () => {
+  test("liegt über der Unter-Navigation, blendet den Assistenten aus und lässt sich scrollen", async ({ page, browserName, isMobile }) => {
+    test.skip(!isMobile, "Vollbild-Menü gibt es nur auf dem Handy")
+    await page.goto("/info.htm")
+    await page.getByRole("button", { name: "Menü öffnen" }).click()
+    const menu = page.locator("#mobile-menu")
+    await expect(menu).toBeVisible()
+    await page.waitForTimeout(600)
+
+    // an der Stelle der Unter-Navigation („Ablauf | Anmelden“) liegt jetzt das Menü
+    const subnavBox = (await page.getByRole("link", { name: "Anmelden", exact: true }).first().boundingBox())!
+    const topEl = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest("#mobile-menu") !== null, { x: subnavBox.x + subnavBox.width / 2, y: subnavBox.y + subnavBox.height / 2 })
+    expect(topEl).toBe(true)
+    expect(await page.getByRole("button", { name: "Fahrschul-Assistent öffnen" }).evaluate((el) => getComputedStyle(el).opacity)).toBe("0")
+
+    // echte Wisch-Geste (nur Chromium kann Touch-Gesten nachstellen)
+    test.skip(browserName !== "chromium", "Touch-Geste nur in Chromium")
+    const cdp = await page.context().newCDPSession(page)
+    await cdp.send("Input.synthesizeScrollGesture", { x: 200, y: 600, yDistance: -400, gestureSourceType: "touch", speed: 800 })
+    await expect.poll(() => menu.evaluate((el) => el.scrollTop)).toBeGreaterThan(100)
+  })
+})

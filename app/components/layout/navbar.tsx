@@ -35,6 +35,8 @@ export function Navbar() {
     if (menuOpen) lenis?.stop()
     else lenis?.start()
     document.documentElement.style.overflow = menuOpen ? "hidden" : ""
+    // blendet schwebende Elemente (z. B. den Assistenten-Button) aus, solange das Menü offen ist
+    document.documentElement.toggleAttribute("data-menu-open", menuOpen)
   }, [menuOpen, lenis])
 
   useEffect(() => {
@@ -206,7 +208,8 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.2 } }}
-            className="tone-night fixed inset-0 z-40 overflow-y-auto pt-[calc(var(--nav-offset)+1.5rem)] pb-12 lg:hidden"
+            data-lenis-prevent
+            className="tone-night fixed inset-0 z-[45] overflow-y-auto overscroll-contain pt-[calc(var(--nav-offset)+1.5rem)] pb-12 lg:hidden"
           >
             <nav className="wrap" aria-label="Mobile Navigation">
               <ul>

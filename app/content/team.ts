@@ -3,7 +3,17 @@
  * („Christian Bubla (Inhaber) und Horst Vetter (Fahrlehrer seit 1989)“).
  */
 
-export type TeamMember = { name: string; role: string; since?: string; initials: string }
+export type TeamMember = {
+  name: string
+  role: string
+  since?: string
+  initials: string
+  /**
+   * Porträtfoto fürs Profil (am besten Hochformat, z. B. /images/team/christian-bubla.webp,
+   * danach `node scripts/responsive-images.mjs`). Ohne Foto zeigt die Profilkarte die Initialen.
+   */
+  photo?: { src: string; alt: string }
+}
 
 export const team: TeamMember[] = [
   { name: "Christian Bubla", role: "Inhaber & Fahrlehrer", initials: "CB" },

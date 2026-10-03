@@ -17,7 +17,7 @@ import { legacySeo, seo } from "~/lib/seo"
 export const meta: MetaFunction = () =>
   seo({
     title: `Theorieunterricht | ${legacySeo.title}`,
-    description: `Theorieunterricht bei der Fahrschule Bubla: ${site.hours.theoryDays.join(", ")}, immer ${site.hours.theoryTime} in der ${site.theoryLocation.street}, Kaufbeuren-Neugablonz. Plus Online-Lernplattform.`,
+    description: `Theorieunterricht bei der Fahrschule Bubla: ${site.hours.theoryDaysShort}, immer ${site.hours.theoryTime} in der ${site.theoryLocation.street}, Kaufbeuren-Neugablonz. Plus Online-Lernplattform.`,
     path: paths.unterricht,
   })
 
@@ -139,7 +139,7 @@ export default function Unterricht() {
         </div>
       </Section>
 
-      <CtaBand title="Komm einfach vorbei." text={`${site.hours.theoryDays.join(", ")} ab ${site.hours.theoryStart} Uhr in der ${site.theoryLocation.street} – oder melde dich online an.`} />
+      <CtaBand title="Komm einfach vorbei." text={`${site.hours.theoryDaysShort} ab ${site.hours.theoryStart} Uhr in der ${site.theoryLocation.street} – oder melde dich online an.`} />
     </>
   )
 }

@@ -180,7 +180,7 @@ export function Assistant() {
         aria-expanded={open}
         aria-label={open ? "Fahrschul-Assistent schließen" : "Fahrschul-Assistent öffnen"}
         className={cn(
-          "fixed right-3 bottom-3 z-[60] inline-flex h-12 items-center gap-2 rounded-full pr-4 pl-3.5 font-bold md:pr-5 md:pl-4 shadow-[0_16px_40px_-12px_rgb(0_0_0/0.55)] transition-all duration-300 active:scale-95 md:right-5 md:bottom-5 md:h-[60px]",
+          "fixed right-3 bottom-3 z-[60] inline-flex h-12 items-center gap-2 rounded-full pr-4 pl-3.5 font-bold md:pr-5 md:pl-4 shadow-[0_16px_40px_-12px_rgb(0_0_0/0.55)] transition-all duration-300 active:scale-95 md:right-5 md:bottom-5 md:h-[60px] [html[data-menu-open]_&]:pointer-events-none [html[data-menu-open]_&]:opacity-0",
           open ? "bg-night text-white" : "bg-night text-white ring-2 ring-white/70 hover:-translate-y-0.5",
         )}
       >

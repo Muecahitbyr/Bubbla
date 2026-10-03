@@ -2,6 +2,7 @@ import { Award, Heart, Sparkles } from "~/lib/icons"
 import type { MetaFunction } from "react-router"
 import { LocalNav } from "~/components/layout/local-nav"
 import { CtaBand } from "~/components/ui/cta-band"
+import { MockBadge } from "~/components/ui/mock-badge"
 import { PageHero } from "~/components/ui/page-hero"
 import { Reveal, Stagger, StaggerItem } from "~/components/ui/reveal"
 import { ScrollText } from "~/components/ui/scroll-text"
@@ -32,25 +33,37 @@ export default function Team() {
       <PageHero kicker="Unser Team" title="Kompetenz, Leidenschaft und Qualität." lead={teamText.replace(/^[^.]+\.\s*/, "")} />
 
       <Section id="fahrlehrer" space="md">
-        <div className="wrap grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-          <Reveal className="lg:col-span-7">
-            <figure>
-              <img {...responsiveImage(teamPhoto.src, imageSizes.wide)} alt={teamPhoto.alt} className="h-auto w-full rounded-[26px]" loading="eager" fetchPriority="high" decoding="async" />
-              <figcaption className="text-muted mt-3 text-[13px]">Unterwegs mit dem Fahrschul-Golf – „mit Spaß zum Erfolg“ steht sogar auf der Motorhaube.</figcaption>
-            </figure>
-          </Reveal>
-          <Stagger as="ul" className="space-y-4 lg:col-span-5">
+        <div className="wrap">
+          <Stagger as="ul" className="grid gap-4 md:grid-cols-2 md:gap-6">
             {team.map((m) => (
-              <StaggerItem as="li" key={m.name} className="bg-tile flex items-center gap-5 rounded-[24px] p-6">
-                <span className="bg-sun text-ink grid size-16 shrink-0 place-items-center rounded-full text-[20px] font-extrabold">{m.initials}</span>
-                <span>
-                  <span className="block text-[22px] font-extrabold tracking-[-0.02em]">{m.name}</span>
-                  <span className="text-muted block text-[16px]">{m.role}</span>
-                  {m.since && <span className="text-bubla mt-1 block text-[14px] font-bold">{m.since}</span>}
-                </span>
+              <StaggerItem as="li" key={m.name} className="bg-tile overflow-hidden rounded-[26px]">
+                <div className="relative aspect-[4/3] overflow-hidden lg:aspect-[16/10]">
+                  {m.photo ? (
+                    <img {...responsiveImage(m.photo.src, imageSizes.half)} alt={m.photo.alt} className="absolute inset-0 size-full object-cover" loading="eager" decoding="async" />
+                  ) : (
+                    <div className="bg-mist absolute inset-0 grid place-items-center">
+                      <span className="bg-sun text-ink grid size-36 place-items-center rounded-full text-[52px] font-extrabold tracking-[-0.04em] md:size-44 md:text-[64px]" aria-hidden>
+                        {m.initials}
+                      </span>
+                      <MockBadge label="Foto folgt" className="absolute top-4 left-4" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-6 md:p-8">
+                  <p className="text-[26px] font-extrabold tracking-[-0.03em] md:text-[30px]">{m.name}</p>
+                  <p className="text-muted mt-1 text-[16px]">{m.role}</p>
+                  {m.since && <p className="text-bubla mt-2 text-[14px] font-bold">{m.since}</p>}
+                </div>
               </StaggerItem>
             ))}
           </Stagger>
+
+          <Reveal className="mt-4 md:mt-6">
+            <figure>
+              <img {...responsiveImage(teamPhoto.src, imageSizes.full)} alt={teamPhoto.alt} className="aspect-[16/9] h-auto w-full rounded-[26px] object-cover" loading="lazy" decoding="async" />
+              <figcaption className="text-muted mt-3 text-[13px]">Unterwegs mit dem Fahrschul-Golf – „mit Spaß zum Erfolg“ steht sogar auf der Motorhaube.</figcaption>
+            </figure>
+          </Reveal>
         </div>
       </Section>
 

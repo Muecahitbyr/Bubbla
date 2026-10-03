@@ -81,7 +81,7 @@ export function Footer() {
           <div>
             <h2 className="mb-4 text-[13px] font-bold tracking-[0.1em] text-white uppercase">Theorieunterricht</h2>
             <p className="text-muted">
-              {site.hours.theoryDays.join(", ")}
+              {site.hours.theoryDaysShort}
               <br />
               <span className="text-white">{site.hours.theoryTime}</span>
               <br />
